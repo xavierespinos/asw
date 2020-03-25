@@ -5,9 +5,25 @@ one:
   title: MyText
   url: MyText
   text: MyText
+  points: 0
 
 two:
   user_id: 1
   title: MyText
   url: MyText
   text: MyText
+  points: 4 
+
+three:
+  user_id: 1
+  title: MyText
+  url: MyText
+  text: MyText
+  points: 5
+  
+most_recent:
+  user_id: 1
+  title: MyText
+  url: MyText
+  text: MyText
+  points: 100
