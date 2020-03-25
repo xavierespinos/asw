@@ -8,5 +8,6 @@ class CreateContribucions < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    add_index :contribucions, [:user_id, :created_at]
   end
 end
