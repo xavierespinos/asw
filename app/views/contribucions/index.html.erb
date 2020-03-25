@@ -1,34 +1,31 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Contribucions</h1>
-
 <table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Title</th>
-      <th>Url</th>
-      <th>Text</th>
-      <th>Points</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @contribucions.each do |contribucion| %>
-      <tr>
-        <td><%= contribucion.user_id %></td>
-        <td><%= contribucion.title %></td>
-        <td><%= contribucion.url %></td>
-        <td><%= contribucion.text %></td>
-        <td><%= contribucion.points %></td>
-        <td><%= link_to 'UpVote', upvote_contribucion_path(contribucion), method: :put%></td>
-        <td><%= link_to 'Show', contribucion %></td>
-        <td><%= link_to 'Edit', edit_contribucion_path(contribucion) %></td>
-        <td><%= link_to 'Destroy', contribucion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+    <tbody>
+      
+      <% @rank = 1 %>
+      
+      <% @contribucions.each do |contribucion| %>
+        <tr id="22681207" class="anihing">
+          <td class="title" align="right">
+            <span class="rank"><%= @rank%>.</span>
+          </td>
+          <td class="title">
+            <a href="" class="storylink"> <%= contribucion.title %> </a>
+            <span class="sitebit comhead"> (
+              <a href="">
+                <span class="sitestr">hardcoded.com</span>
+              </a>
+            )</span>
+          </td>
+        </tr>
+          <td><%= link_to 'UpVote', upvote_contribucion_path(contribucion), method: :put%></td>
+          <td><%= link_to 'Show', contribucion %></td>
+          <td><%= link_to 'Edit', edit_contribucion_path(contribucion) %></td>
+          <td><%= link_to 'Destroy', contribucion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
 </table>
 
 <br>
