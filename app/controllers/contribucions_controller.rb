@@ -1,5 +1,5 @@
 class ContribucionsController < ApplicationController
-  before_action :set_contribucion, only: [:show, :edit, :update, :destroy]
+  before_action :set_contribucion, only: [:show, :edit, :update, :destroy, :upvote]
 
   # GET /contribucions
   # GET /contribucions.json
@@ -60,7 +60,17 @@ class ContribucionsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
+  #PUT /contribucions/1/upVote
+  def upvote
+    @contribucion.points = @contribucion.points + 1
+    @contribucion.save
+    respond_to do |format|
+      format.html { redirect_to contribucions_url}
+      format.json { head :no_content }
+    end
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribucion
@@ -71,4 +81,5 @@ class ContribucionsController < ApplicationController
     def contribucion_params
       params.require(:contribucion).permit(:user_id, :title, :url, :text)
     end
+    
 end

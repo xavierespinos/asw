@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  resources :contribucions
+  resources :contribucions do
+    member do
+      put 'upvote'
+    end
+  end
   resources :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root 'contributions#index'
+  root 'contribucions#index'
 end
