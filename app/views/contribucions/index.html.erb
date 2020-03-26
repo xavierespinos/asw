@@ -19,16 +19,17 @@
                 <tbody>
                   <tr>
                     <td style="width:18px;padding-right:4px">
-                      <a href="https://news.ycombinator.com">
+                      <a href="/">
                         <%= image_tag("logo.gif", style: "border:1px white solid; width:18; height:18") %>
                       </a>
                     </td>
                   <td style="line-height:12pt; height:10px;">
                     <span class="pagetop">
                       <b class="hnname">
-                        <a href="news">Hacker News</a>
+                        <a href="/"> HackerNews</a>
                       </b>
-                      <%= link_to 'new', newest_page_path %>
+                        
+                      <%= link_to 'new', swapIndex_contribucions_path(@contribucions, :where => "new") %>
                       | <a href="front">past</a> 
                       | <a href="newcomments">comments</a> 
                       | <a href="ask">ask</a> |
