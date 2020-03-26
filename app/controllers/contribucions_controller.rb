@@ -1,25 +1,17 @@
 class ContribucionsController < ApplicationController
-  before_action :set_contribucion, only: [:show, :edit, :update, :destroy, :upvotem]
+  before_action :set_contribucion, only: [:show, :edit, :update, :destroy, :upvote]
 
   # GET /contribucions
   # GET /contribucions.json
   def index
-    @contribucions = Contribucion.all
+    @contribucions = Contribucion.all.select{|favor| favor.url != ""}
   end
 
   # GET /contribucions
   # GET /contribucions.json
-  def swapIndex
-    
-    if params[:where] == "new"
-      @contribucions = Contribucion.all.select{|favor| favor.url != "1234567"}
-    else
-      @contribucions = Contribucion.all.select{|favor| favor.ask != nil }
-    end
+  def newPage
+     @contribucions = Contribucion.all.order("created_at DESC")
   end
-  
-  
-  
   
   # GET /contribucions/1
   # GET /contribucions/1.json

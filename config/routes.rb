@@ -2,9 +2,7 @@ Rails.application.routes.draw do
   resources :contribucions do
     member do
       put 'upvote'
-    end
-    collection do
-      get 'swapIndex'
+      get :newPage
     end
   end
   resources :users
