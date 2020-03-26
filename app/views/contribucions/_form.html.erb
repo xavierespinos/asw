@@ -10,6 +10,59 @@
       </ul>
     </div>
   <% end %>
+  
+  <table border="0">
+    <tbody>
+      <tr>
+        <td>title</td>
+        <td size="50">
+          <%= form.text_area :title %>
+          <span style="margin-left:10px"></span>
+        </td>
+      </tr>
+      <tr>
+        <div><%= form.label :user_id %></div>
+        <div><%= form.number_field :user_id %></div>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td size="50">
+          <%= form.text_area :url %>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <b>or</b>
+        </td>
+      </tr>
+      <tr>
+        <td>text</td>
+        <td>
+          <%= form.text_area :text %>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <rd></rd>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <%= form.submit "submit"%>
+        </td>
+      </tr>
+      <tr style="height:20px"></tr>
+      <tr>
+        <td></td>
+        <td>Leave url blank to submit a question for discussion. If there
+         is no url, the text (if any) will appear at the top of the
+         thread.</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <% if false %>
 
   <div class="field">
     <%= form.label :user_id %>
@@ -25,6 +78,8 @@
     <%= form.label :url %>
     <%= form.text_area :url %>
   </div>
+  
+  
 
   <div class="field">
     <%= form.label :text %>
@@ -34,4 +89,7 @@
   <div class="actions">
     <%= form.submit %>
   </div>
+  
+  <% end %>
+  
 <% end %>
