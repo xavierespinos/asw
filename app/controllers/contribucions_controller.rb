@@ -3,15 +3,16 @@ class ContribucionsController < ApplicationController
 
   # GET /contribucions
   # GET /contribucions.json
-  def index
-      @contribucions = Contribucion.all.select{|favor| favor.url != ""}  
+  def index(value = 0)
+    @contribucions = Contribucion.all.select{|c| c.url != ""}  
   end
   
   
   # GET /contribucions/newPage
   # GET /contribucions/newPage.json
   def newPage
-      @contribucions = Contribucion.all.order("created_at DESC")
+    @contribucions = Contribucion.all.order("created_at DESC")
+    render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end
 
   # GET /contribucions/1
