@@ -4,15 +4,16 @@ class ContribucionsController < ApplicationController
   # GET /contribucions
   # GET /contribucions.json
   def index
-    @contribucions = Contribucion.all.select{|favor| favor.url != ""}
-  end
-
-  # GET /contribucions
-  # GET /contribucions.json
-  def newPage
-     @contribucions = Contribucion.all.order("created_at DESC")
+      @contribucions = Contribucion.all.select{|favor| favor.url != ""}  
   end
   
+  
+  # GET /contribucions/newPage
+  # GET /contribucions/newPage.json
+  def newPage
+      @contribucions = Contribucion.all.order("created_at DESC")
+  end
+
   # GET /contribucions/1
   # GET /contribucions/1.json
   def show
@@ -80,7 +81,7 @@ class ContribucionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribucion
-      @contribucion = Contribucion.find(params[:id])
+        @contribucion = Contribucion.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

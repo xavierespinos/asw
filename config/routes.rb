@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
+get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
   resources :contribucions do
     member do
       put 'upvote'
-      get :newPage
     end
   end
   resources :users
