@@ -1,10 +1,20 @@
+
+
 class Contribucion < ApplicationRecord
 	#belongs_to :user
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
 	validate :needAskOrURL
 	validates :title, presence: true
-	
+	validate :uri?
+  
+  def uri?
+    uri = URI.parse(url)
+    if !(uri.is_a?(URI::HTTP) && !uri.host.nil?) 
+      errors.add(:url, "url not valid")
+    end
+  end
+  
   def onlyAskOrURL 
     if url != "" and text != ""
       errors.add(:url, "can't have url and text")
