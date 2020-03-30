@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' },  :skip => [:registrations] 
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
   resources :contribucions do
     member do
