@@ -1,9 +1,10 @@
 class ContribucionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :newPage]
   before_action :set_contribucion, only: [:show, :edit, :update, :destroy, :upvote]
 
   # GET /contribucions
   # GET /contribucions.json
-  def index(value = 0)
+  def index
     @contribucions = Contribucion.all.select{|c| c.url != ""}  
   end
   
@@ -23,6 +24,7 @@ class ContribucionsController < ApplicationController
   # GET /contribucions/new
   def new
     @contribucion = Contribucion.new
+    @contribucion.user_id = current_user.id
   end
 
   # GET /contribucions/1/edit
@@ -33,7 +35,6 @@ class ContribucionsController < ApplicationController
   # POST /contribucions.json
   def create
     @contribucion = Contribucion.new(contribucion_params)
-
     respond_to do |format|
       if @contribucion.save
         format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
