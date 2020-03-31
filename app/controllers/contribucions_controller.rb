@@ -40,8 +40,10 @@ class ContribucionsController < ApplicationController
         format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
         format.json { render :show, status: :created, location: @contribucion }
       else
-        format.html { render :new }
-        format.json { render json: @contribucion.errors, status: :unprocessable_entity }
+        @urlP = contribucion_params[:url]
+        @contribucion = Contribucion.all.select{|c| c.url == @urlP}  
+        format.html { redirect_to @contribucion}
+        format.json { render :show, status: :created, location: @contribucion}
       end
     end
   end

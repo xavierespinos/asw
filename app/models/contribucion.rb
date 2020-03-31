@@ -7,11 +7,12 @@ class Contribucion < ApplicationRecord
 	validate :needAskOrURL
 	validates :title, presence: true
 	validate :uri?
+  validates_uniqueness_of :url
   
   def uri?
     uri = URI.parse(url)
     if !(uri.is_a?(URI::HTTP) && !uri.host.nil?) 
-      errors.add(:url, "url not valid")
+      errors.add(:url, "not valid")
     end
   end
   
