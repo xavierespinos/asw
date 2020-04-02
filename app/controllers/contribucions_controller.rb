@@ -74,11 +74,15 @@ class ContribucionsController < ApplicationController
   
   #PUT /contribucions/1/upVote
   def upvote
-    @contribucion.points = @contribucion.points + 1
-    @contribucion.save
+    @points = @contribucion.points + 1
     respond_to do |format|
-      format.html { redirect_to contribucions_url}
-      format.json { head :no_content }
+      if @contribucion.update_attribute(:points, @points)  
+        format.html { redirect_to contribucions_url}
+        format.json { head :no_content }
+      else
+        format.html { render :edit }
+        format.json { render json: @contribucion.errors, status: :unprocessable_entity }
+      end
     end
   end
   
