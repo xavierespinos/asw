@@ -1,7 +1,7 @@
 
 
 class Contribucion < ApplicationRecord
-	#belongs_to :user
+	belongs_to :user
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
 	validate :needAskOrURL
