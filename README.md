@@ -1,13 +1,13 @@
 # README
 
-Xavier Espinos
+Adrian Alvarez
 
 Marcel Costa
-
-Adrian Alvarez
 
 Luis Belloso
 
 Sergio Pascual
 
-HEROKU: https://morning-plains-45903.herokuapp.com/
+Xavier Espinos
+
+HEROKU: https://limitless-tundra-31400.herokuapp.com/
