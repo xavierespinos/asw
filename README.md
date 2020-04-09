@@ -1,13 +1,13 @@
 # README
 
-Xavier Espinos
+Adrian Alvarez
 
 Marcel Costa
-
-Adrian Alvarez
 
 Luis Belloso
 
 Sergio Pascual
+
+Xavier Espinos
 
 HEROKU: https://limitless-tundra-31400.herokuapp.com/
