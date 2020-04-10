@@ -1,7 +1,6 @@
 
 
 class Contribucion < ApplicationRecord
-	belongs_to :user
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
 	validate :needAskOrURL
@@ -10,9 +9,11 @@ class Contribucion < ApplicationRecord
   validates_uniqueness_of :url
   
   def uri?
-    uri = URI.parse(url)
-    if !(uri.is_a?(URI::HTTP) && !uri.host.nil?) 
-      errors.add(:url, "not valid")
+    if text == ""
+      uri = URI.parse(url)
+      if !(uri.is_a?(URI::HTTP) && !uri.host.nil?) 
+        errors.add(:url, "not valid")
+      end
     end
   end
   
