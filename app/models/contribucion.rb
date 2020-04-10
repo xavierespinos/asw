@@ -6,7 +6,7 @@ class Contribucion < ApplicationRecord
 	validate :needAskOrURL
 	validates :title, presence: true
 	validate :uri?
-  validates_uniqueness_of :url
+  #validates_uniqueness_of :url
   
   def uri?
     if text == ""
