@@ -43,6 +43,7 @@ class ContribucionsController < ApplicationController
         @contribucion.tipo = "url"
       end
       respond_to do |format|
+        @contribucion.user_id= current_user().id
         if @contribucion.save
           format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
           format.json { render :show, status: :created, location: @contribucion }
