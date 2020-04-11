@@ -34,22 +34,27 @@ class ContribucionsController < ApplicationController
   # POST /contribucions
   # POST /contribucions.json
   def create
-    @contribucion = Contribucion.new(contribucion_params)
-    if @contribucion.url.empty?
-      @contribucion.tipo = "ask"
-    else
-      @contribucion.tipo = "url"
-    end
-    respond_to do |format|
-      if @contribucion.save
-        format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
-        format.json { render :show, status: :created, location: @contribucion }
+    @param = contribucion_params[:url]
+    if @param == "" or (@param != "" and !Contribucion.exists?(url: @param)) #si es un text o url nou el guarda
+      @contribucion = Contribucion.new(contribucion_params)
+      if @contribucion.url.empty?
+        @contribucion.tipo = "ask"
       else
-        @url = contribucion_params[:url]
-        @contribucion = Contribucion.all.select{|c| c.url == @url}  
+        @contribucion.tipo = "url"
+      end
+      respond_to do |format|
+        if @contribucion.save
+          format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
+          format.json { render :show, status: :created, location: @contribucion }
+        end
+      end
+    else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
+      respond_to do |format|
+        @contribucion = Contribucion.all.select{|c| c.url == @param}  
         format.html { redirect_to @contribucion}
         format.json { render :show, status: :created, location: @contribucion}
       end
+    end
     end
   end
 

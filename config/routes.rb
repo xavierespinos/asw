@@ -1,21 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
-<<<<<<< HEAD
-=======
   get '/users/:id' =>'users#show'
 
-
->>>>>>> 72093dd086372e410ad53e46aa09ed51af46ecdd
   resources :contribucions do
     member do
       put 'upvote'
     end
   end
-<<<<<<< HEAD
-=======
   
->>>>>>> 72093dd086372e410ad53e46aa09ed51af46ecdd
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'contribucions#index'
 end
