@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
+  
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
   get '/users/:id' =>'users#show'
+  get '/users/:id/edit' => 'users#edit'
 
   resources :contribucions do
     member do

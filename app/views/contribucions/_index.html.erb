@@ -87,7 +87,7 @@
                       <td class="subtext">
                       <span class="score" id="score_22681207"><%=contribucion.points%> points</span>
                         by 
-                        <a href="/users/<%=contribucion.user_id%>" class="hnuser">"hard" </a> 
+                        <a href="/users/<%=contribucion.user_id%>" class="hnuser"><%=User.find(contribucion.user_id).email%></a> 
                         <span class="age">
                            <%= time_ago_in_words(contribucion.created_at) %>
                         </span>

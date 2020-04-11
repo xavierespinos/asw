@@ -10,4 +10,6 @@
   <%= @user.email %>
 </p>
 
-
+<% if current_user().id == @user.id %>
+   <a href="/users/<%=@user.id%>/edit" class="hnuser">Edit Profile </a> 
+<%end%>
