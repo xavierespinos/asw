@@ -39,7 +39,14 @@
                   </td>
                   <td style="text-align:right;padding-right:4px;">
                     <span class="pagetop">
-                      <%= link_to 'Login', user_session_path %>
+                      <% if logged_in? %>
+                        <a href="/users/<%= current_user().id %>"><%= current_user().email %></a>
+                         
+                        |  
+                        <%= link_to 'Logout', destroy_user_session_path, method: "delete" %>
+                      <% else %>
+                        <%= link_to 'Login', user_session_path %>
+                      <% end %>
                     </span>
                   </td>
                   </tr>
@@ -65,8 +72,14 @@
                       </center>
                     </td>
                       <td class="title">
-                        <a href="/contribucions/<%=contribucion.id%>" class="storylink"><%=contribucion.title%></a>
-                        <span class="sitebit comhead"> (<a href="<%=contribucion.url%>"><span class="sitestr"><%=contribucion.url%></span></a>)</span>
+                        <% if type_url(contribucion.url) %>
+                          <a href="<%=contribucion.url%>"><%=contribucion.title%></a>
+                          <span class="sitebit comhead"> (<a href="<%=contribucion.url%>"><span class="sitestr"><%=contribucion.url%></span></a>)</span>
+                        <% else %>
+                          <a href="/contribucions/<%=contribucion.id%>" class="storylink"><%=contribucion.title%></a>
+                          
+                        <%end%>
+                      
                       </td>
                     </tr>
                     <tr>
