@@ -3,4 +3,5 @@
 <%= render partial: 'form', locals: {user: @user}%>
 
 <%= link_to 'Save', @user, method: :update %> |
-<%= link_to 'Back', user_path %>
+<a href="/users/<%= current_user().id %>">Back</a>
+

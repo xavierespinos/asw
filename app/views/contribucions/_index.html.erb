@@ -34,7 +34,10 @@
                       | <a href="ask">ask</a> |
                       <a href="show">show</a> |
                       <a href="jobs">jobs</a> | 
-                      <%= link_to 'submit', new_contribucion_path %>           
+                      <%= link_to 'submit', new_contribucion_path %>
+                       <% if !@tipo.nil? %>
+                       |<font color="#ffffff"><%= @tipo %></font>  
+                       <%end%>
                     </span>
                   </td>
                   <td style="text-align:right;padding-right:4px;">
