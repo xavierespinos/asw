@@ -1,5 +1,3 @@
-
-
 class Contribucion < ApplicationRecord
   has_one :user
 	default_scope -> { order(points: :desc) }

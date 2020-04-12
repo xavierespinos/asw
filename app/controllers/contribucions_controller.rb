@@ -21,7 +21,6 @@ class ContribucionsController < ApplicationController
     idUser = params[:id]
     user = User.find(idUser)
     @tipo = "#{user.email} submissions"
-    ::Rails.logger.info "\n***\nVar: #{@tipo}\n***\n"
     @contribucions = Contribucion.where("user_id = ?", idUser)
     render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end

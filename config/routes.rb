@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+get 'comentaris/new'
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks',sessions: 'users/sessions' }
   get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
   get '/contribucions/submitted', to: 'contribucions#submitted', action: :submitted , controller: 'contribucions'
@@ -9,6 +10,8 @@ Rails.application.routes.draw do
     member do
       put 'upvote'
     end
+  end
+  resources :comentaris do
   end
   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
