@@ -108,14 +108,20 @@ class ContribucionsController < ApplicationController
   #PUT /contribucions/1/upVote
   def upvote
     @points = @contribucion.points + 1
-    respond_to do |format|
-      if @contribucion.update_attribute(:points, @points)  
-        format.html { redirect_to contribucions_url}
-        format.json { head :no_content }
-      else
-        format.html { render :edit }
-        format.json { render json: @contribucion.errors, status: :unprocessable_entity }
+    
+    if !current_user().nil?
+      respond_to do |format|
+        @contribucion.update_attribute(:points, @points) 
+        if params[:lloc] == "main"
+          format.html { redirect_to contribucions_url}
+          format.json { head :no_content } 
+        else 
+          format.html { redirect_to @contribucion}
+          format.json { head :no_content }
+        end
       end
+    else
+      redirect_to '/login'
     end
   end
   
