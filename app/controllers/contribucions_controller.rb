@@ -9,6 +9,13 @@ class ContribucionsController < ApplicationController
   end
   
   
+  # GET /contribucions/askPage
+  # GET /contribucions/askPage.json
+  def askPage
+    @contribucions = Contribucion.all.select{|c| c.text != ""}
+    render :partial  => 'index', :locals => { :contribucions => @contribucions } 
+  end
+  
   # GET /contribucions/newPage
   # GET /contribucions/newPage.json
   def newPage
