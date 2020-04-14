@@ -44,7 +44,6 @@
                     <span class="pagetop">
                       <% if logged_in? %>
                         <a href="/users/<%= current_user().id %>"><%= current_user().email %></a>
-                         
                         |  
                         <%= link_to 'Logout', destroy_user_session_path, method: "delete" %>
                       <% else %>

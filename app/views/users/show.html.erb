@@ -1,35 +1,59 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
-
-<p>
-  <strong>Created:</strong>
-  <%= time_ago_in_words(@user.created_at) %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-</p>
-
-<p>
-  <%= text_area(:comment, :text, size: "70x5") %>
-</p>
-
-<p>
-  <strong>Contribucions:</strong>
-  <%= link_to 'Contribucions',contribucions_submitted_path(:id => current_user().id),method: "get"  %>
-</p>
-
-<p>
-  <strong>Comentaris:</strong>
-  <%= "Falta acabar"  %>
-</p>
-
-<% if current_user().id == @user.id %>
-   <a href="/users/<%=@user.id%>/edit" class="hnuser">Edit Profile </a> 
-   |
-   <%= link_to 'Back', contribucions_path %>
-<%end%>
+<%= render "menu/menu" %>
+          <tr>
+            <td>
+              <img src="s.gif" width="0" height="10">
+              <table width="100%" cellspacing="0" cellpadding="1">
+                <tbody>
+                  
+                    <p id="notice"><%= notice %></p>
+  
+                    <p>
+                      <strong>Email:</strong>
+                      <%= @user.email %>
+                    </p>
+                    
+                    <p>
+                      <strong>Created:</strong>
+                      <%= time_ago_in_words(@user.created_at) %>
+                    </p>
+                    
+                    <p>
+                      <strong>Description:</strong>
+                    </p>
+                    
+                    <p>
+                      <%= text_area(:comment, :text, size: "70x5") %>
+                    </p>
+                    
+                    <p>
+                      <strong>Contribucions:</strong>
+                      <%= link_to 'Contribucions',contribucions_submitted_path(:id => current_user().id),method: "get"  %>
+                    </p>
+                    
+                    <p>
+                      <strong>Comentaris:</strong>
+                      <%= "Falta acabar"  %>
+                    </p>
+                    
+                    <% if current_user().id == @user.id %>
+                       <a href="/users/<%=@user.id%>/edit" class="hnuser">Edit Profile </a> 
+                       |
+                       <%= link_to 'Back', contribucions_path %>
+                    <%end%>
+                  
+                  
+                  <tr>
+                    <td bgcolor="#ff6600">
+            
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            <br><center>Created by: Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos</center>
+            <br><br><center>ASW FIB Project</center>
+          </tbody>
+        </table>
+        </center>
+      <script type="text/javascript" src="hn.js?WtiDADWyAh3OLz9I78m7"></script>
+</html>
+  
