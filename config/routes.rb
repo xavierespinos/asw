@@ -5,7 +5,11 @@ get 'comentaris/new'
   get '/contribucions/submitted', to: 'contribucions#submitted', action: :submitted , controller: 'contribucions'
   get '/users/:id' =>'users#show'
   get '/users/:id/edit', :to => 'users#edit', :as => :user
-
+  
+  resources :contribucions do
+     post 'comment', on: :member
+   end
+  
   resources :contribucions do
     member do
       put 'upvote'

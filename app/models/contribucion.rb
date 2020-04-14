@@ -1,5 +1,6 @@
 class Contribucion < ApplicationRecord
   has_one :user
+  has_many :comentaris
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
 	validate :needAskOrURL
