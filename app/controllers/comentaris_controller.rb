@@ -29,6 +29,7 @@ class ComentarisController < ApplicationController
   end
 
   def show
+    @comentari = Comentari.find(params[:id])
   end
 
   def index

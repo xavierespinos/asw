@@ -28,12 +28,36 @@
                         <table class="fatitem" border="0">
                             <tbody>
                                 <tr>
-                                    <div class="comment">
-                                        <span class="commtext c00"> <%= User.find(params[:id]).name %></span>
-                                        <span class="commtext c00"> <%= Comentari.find(params[:id]).text %></span>
-                                    </div>
+                                    <td>
+                                        <div style="margin-top:2px; margin-bottom:-10px;">
+                                            <span class="comhead">
+                                                
+                                                <a><%= User.find(@comentari.user_id).email %></a>
+                                                <span class="age">
+                                                    <a>creat fa...</a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <div class="comment">
+                                            <span class= "comment c00"><%=@comentari.text %></span>
+                                        </div>
+                                        <tr>
+                                        
+                                            <td>
+                                                <br>
+                                                <%= form_tag :action => "new", :id => @comentari %>
+                                                <textarea name="content" id="comment_content" rows="6" cols="60"></textarea></br>
+                                                <%= submit_tag "add a comment" %>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </td>
+                                    
                                 </tr>
                             </tbody>
+                        
+                            
                             
                         </table>
                     </td>
