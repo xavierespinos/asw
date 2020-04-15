@@ -1,38 +1,40 @@
     <tr id="pagespace" title="" style="height:10px"></tr>
       <tr>
         <td>
-          <div>
-            <% if @comentari.comentari_id != 0 %>
-              <h1>Comentario texto: <%= @comentaris[0].text %></h1>
-            <% else %>
-              <h1>Contribución  texto: <%= @contribucion.title %></h1>
-            <% end %>  
-          </div>
-    
-          <%= form_with(model: @comentari, local: true) do |form| %>
-            <% if @comentari.errors.any? %>
-              <div id="error_explanation">
-                <h2><%= pluralize(@comentari.errors.count, "error") %> prohibited this comentari from being saved:</h2>
-          
-                <ul>
-                  <% @comentari.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                  <% end %>
-                </ul>
+          <% if new == 1 %>
+            <div>
+              <% if @comentari.comentari_id != 0 %>
+                <h1>Comentario texto: <%= @comentaris[0].text %></h1>
+              <% else %>
+                <h1>Contribución  texto: <%= @contribucion.title %></h1>
+              <% end %>  
+            </div>
+      
+            <%= form_with(model: @comentari, local: true) do |form| %>
+              <% if @comentari.errors.any? %>
+                <div id="error_explanation">
+                  <h2><%= pluralize(@comentari.errors.count, "error") %> prohibited this comentari from being saved:</h2>
+            
+                  <ul>
+                    <% @comentari.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            
+              <%= form.hidden_field :contribucion_id, :value => @comentari.contribucion_id %>
+              <%= form.hidden_field :comentari_id, :value => @comentari.comentari_id %>
+  
+              <div class="field">
+                <%= form.text_area :text %>
+              </div>
+            
+              <div class="actions">
+                <%= form.submit "add comments" %>
               </div>
             <% end %>
-          
-            <%= form.hidden_field :contribucion_id, :value => @comentari.contribucion_id %>
-            <%= form.hidden_field :comentari_id, :value => @comentari.comentari_id %>
-
-            <div class="field">
-              <%= form.text_area :text %>
-            </div>
-          
-            <div class="actions">
-              <%= form.submit "add comments" %>
-            </div>
-          <% end %>
+          <% end %>          
     
         </td>
       </tr>

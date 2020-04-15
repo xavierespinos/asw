@@ -27,6 +27,15 @@ class ComentarisController < ApplicationController
 
   def destroy
   end
+  
+  def threads
+    idUser = params[:user_id]
+    user = User.find(idUser)
+    @tipo = "#{user.email} threads"
+    @comentari = Comentari.new
+    @comentaris = []
+    @comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
+  end
 
   def show
     @comentari = Comentari.find(params[:id])

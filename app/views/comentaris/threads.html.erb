@@ -1,0 +1,8 @@
+<% cache do %>
+  <%= render "menu/menu" %>
+<% end %>
+<% cache do %>
+    <%= render 'form', contribucion: @contribucion, comentari: @comentari, comentaris: @comentaris, new: 0 %>
+<% end %>
+
+
