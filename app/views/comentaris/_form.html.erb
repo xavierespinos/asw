@@ -39,10 +39,15 @@
         </td>
       </tr>
       
+      <span><%= @id_reply %></span>
+      <br>
+      <span><%= @id_contrib %></span>
+      
       <% if !@comentaris.nil? and @comentari.comentari_id == 0 %>
         <% @comentaris.each do |c| %>
           <tr>
             <td>
+              
               <%= c.text %>
             </td>
           </tr>

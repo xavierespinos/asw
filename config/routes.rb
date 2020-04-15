@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 get 'comentaris/new'
+post '/contribucions/:contribucion_id/comentaris/new', to: 'comentaris#new'
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks',sessions: 'users/sessions' }
   get '/contribucions/newPage', to: 'contribucions#newPage', action: :newPage , controller: 'contribucions'
   get '/contribucions/askPage', to: 'contribucions#askPage', action: :askPage , controller: 'contribucions'

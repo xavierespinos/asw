@@ -3,10 +3,12 @@ class ComentarisController < ApplicationController
   
   def new
     comentari_id = 0
+    @id_reply = params[:id_comentari]
+    @id_contrib = params[:id_contribucio]
     if params[:comentari_id] != nil then
       comentari_id = params[:comentari_id] 
     end
-    initNew(params[:id],comentari_id,0)
+    initNew(params[:contribucion_id],comentari_id,0)
   end
 
   def create
@@ -39,6 +41,10 @@ class ComentarisController < ApplicationController
 
   def show
     @comentari = Comentari.find(params[:id])
+    @comentari2 = Comentari.new()
+    @comentari2.user_id = current_user.id
+    @comentari2.contribucion_id = @comentari.contribucion_id
+    @comentari2.comentari_id = @comentari.comentari_id
   end
 
   def index
@@ -51,7 +57,7 @@ class ComentarisController < ApplicationController
   def initNew(contribucion_id,comentari_id,vRender)
     #::Rails.logger.info "\n***\nID:-------: #{comentari_id}\n***\n"
     @contribucion = Contribucion.find(contribucion_id)
-    @comentari = Comentari.new
+    @comentari = Comentari.new(comentari_params)
     if comentari_id == 0 then
       @comentaris = Comentari.where(contribucion_id: contribucion_id)
     else
@@ -63,5 +69,7 @@ class ComentarisController < ApplicationController
        render :new, :locals => {:contribucion => @contribucion, :comentari => @comentari, :comentaris => @comentaris}
     end
   end
+  
+  
   
 end
