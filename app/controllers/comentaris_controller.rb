@@ -2,6 +2,7 @@ class ComentarisController < ApplicationController
   before_action :authenticate_user!
   
   def new
+
     comentari_id = 0
     @id_reply = params[:id_comentari]
     @id_contrib = params[:id_contribucio]
@@ -39,12 +40,13 @@ class ComentarisController < ApplicationController
     @comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
   end
 
+
   def show
     @comentari = Comentari.find(params[:id])
     @comentari2 = Comentari.new()
     @comentari2.user_id = current_user.id
     @comentari2.contribucion_id = @comentari.contribucion_id
-    @comentari2.comentari_id = @comentari.comentari_id
+    @comentari2.comentari_id = @comentari.id
   end
 
   def index
@@ -55,7 +57,6 @@ class ComentarisController < ApplicationController
   end
 
   def initNew(contribucion_id,comentari_id,vRender)
-    #::Rails.logger.info "\n***\nID:-------: #{comentari_id}\n***\n"
     @contribucion = Contribucion.find(contribucion_id)
     @comentari = Comentari.new(comentari_params)
     if comentari_id == 0 then
@@ -66,7 +67,7 @@ class ComentarisController < ApplicationController
     @comentari.contribucion_id = contribucion_id  
     @comentari.comentari_id = comentari_id 
     if vRender == 1 then
-       render :new, :locals => {:contribucion => @contribucion, :comentari => @comentari, :comentaris => @comentaris}
+       redirect_to "/contribucions/#{contribucion_id}"
     end
   end
   

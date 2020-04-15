@@ -29,7 +29,9 @@
                         <a href="/"> HackerNews</a>
                       </b>
                       <%= link_to "new", contribucions_newPage_path %>
-                      | <%= link_to 'threads', new_contribucion_path %>
+                      <% if !current_user().nil? %>
+                        |<%= link_to 'threads',comentaris_threads_path(:user_id => current_user().id),method: "get"  %>
+                      <% end %>
                       | <a href="front">past</a> 
                       | <a href="newcomments">comments</a> 
                       | <%= link_to "ask", contribucions_askPage_path %> |

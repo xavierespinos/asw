@@ -1,0 +1,45 @@
+<table>
+  <tr>
+    <td>
+      <% if !@comentaris.nil? %>
+        <ul>  
+          <% @comentaris.each do |c| %>
+            <% if c.comentari_id == 0 %>
+              <li style="list-style:none;">
+                 <a style="color: #828282;" href="#">▲</a>
+                 <a style="color: #828282;" href="#"> <%= c.user.email %> </a>
+                 <span class="age">
+                   <a href="item?id=22856013"><%= time_ago_in_words(c.created_at) %></a>
+                 </span> 
+                Comentarios -> <%= c.comentaris.size %>
+                <br/>
+                <span><%=c.text%></span>
+                <br/>
+                <a style="color: #828282;" href="/contribucions/<%=c.id%>/comentaris/<%=c.id%>">reply</a>
+                </li>
+                  <% if !c.comentaris.nil? %>
+                    <ul>
+                      <% c.comentaris.each do |cc| %>
+                         <li style="list-style:none;">
+                           <a style="color: #828282;" href="#">▲</a>
+                           <a style="color: #828282;" href="#"> <%= cc.user.email %> </a>
+                           <span class="age">
+                             <a href="item?id=22856013"><%= time_ago_in_words(cc.created_at) %></a>
+                           </span> 
+                           Comentarios -> <%= cc.comentaris.size %>
+                          <br/>
+                          <span><%=cc.text%></span>
+                          <br/>
+                          <a style="color: #828282;" href="/contribucions/<%=cc.id%>/comentaris/<%=cc.id%>">reply</a>
+                          </li>
+                            <%= render "comentaris/replys",  replys: cc.comentaris %>
+                      <%end%>
+                    </ul>
+                  <%end%>
+            <% end %>  
+          <% end %>
+        </ul>
+      <% end %>
+    </td>
+  </tr>
+</table>
