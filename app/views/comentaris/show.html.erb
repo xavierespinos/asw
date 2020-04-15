@@ -46,19 +46,37 @@
                                         
                                             <td>
                                                 <br>
-                                                <%= form_tag :action => "new", :id => @comentari %>
-                                                <textarea name="content" id="comment_content" rows="6" cols="60"></textarea></br>
-                                                <%= submit_tag "add a comment" %>
-                                                </form>
+                                                <%= form_with(model: @comentari2, local: true) do |form| %>
+                                                <% if @comentari2.errors.any? %>
+                                                  <div id="error_explanation">
+                                                    <h2><%= pluralize(@comentari2.errors.count, "error") %> prohibited this comentari from being saved:</h2>
+                                              
+                                                    <ul>
+                                                      <% @comentari.errors.full_messages.each do |message| %>
+                                                        <li><%= message %></li>
+                                                      <% end %>
+                                                    </ul>
+                                                  </div>
+                                                <% end %>
+                                              
+                                                <%= form.hidden_field :contribucion_id, :value => @comentari2.contribucion_id %>
+                                                <%= form.hidden_field :comentari_id, :value => @comentari2.comentari_id %>
+                                    
+                                                <div class="field">
+                                                  <%= form.text_area :text %>
+                                                </div>
+                                              
+                                                <div class="actions">
+                                                  <%= form.submit "reply" %>
+                                                </div>
+                                              <% end %>
                                             </td>
                                         </tr>
                                     </td>
                                     
                                 </tr>
                             </tbody>
-                        
-                            
-                            
+                  
                         </table>
                     </td>
                 </tr>

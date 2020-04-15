@@ -93,13 +93,21 @@
                             <div class="reply">       
                               <p>
                                 <font size="1">
-                                    
                                     <a href="/contribucions/<%=@contribucion.id%>/comentaris/<%=c.id%>/">reply</a>
                                 </font>
                               </p>
                             </div>
                             </span>
                             </div>
+                            <td>
+                              <% if !c.comentaris.nil? %>
+                                <span><%=c.comentaris.size%></span>
+                                <% c.comentaris.each do |cc| %>
+                                
+                                  <span>aaaa</span>
+                                <%end%>
+                              <%end%>
+                            </td>
                             </td>
                   <%end%>
             </tr>
