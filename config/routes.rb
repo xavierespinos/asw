@@ -17,6 +17,13 @@ get 'comentaris/new'
       put 'upvote'
     end
   end
+  
+  resources :comentaris do
+    member do
+      put 'upvote'
+    end
+  end
+  
   resources :comentaris do
     resources :comentaris
   end

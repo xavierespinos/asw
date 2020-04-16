@@ -69,13 +69,13 @@
                         
                         <td class="votelinks" valign="top">
                           <center>
-                            <a id="up_22856013" href="vote?id=22856013&amp;how=up&amp;goto=item%3Fid%3D22855286">
-                            <div class="votearrow" title="upvote"></div>
+                            <a id="up_22681207" <%= link_to '▲', upvote_comentari_path(c, :lloc => "show"), method: :put %>
                             </a>
                           </center>
                         </td>
                         <td class="default">
                           <div style="margin-top:2px; margin-bottom:-10px;">
+                             <span class="score" id="score_22681207"><%=c.points%> points</span>
                             <span class="comhead">
                               <a href="/users/<%= c.user_id%>" class="hnuser"><%=c.user_id%></a> 
                             <span class="age">

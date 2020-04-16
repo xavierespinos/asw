@@ -35,6 +35,26 @@ class ComentarisController < ApplicationController
   def index
   end
   
+  #PUT /comentaris/1/upVote
+  def upvote
+    @points = @comentari.text + 1
+    
+    if !current_user().nil?
+      respond_to do |format|
+        @comentari.update_attribute(:points, @points) 
+        if params[:lloc] == "main"
+          format.html { redirect_to contribucions_url}
+          format.json { head :no_content } 
+        else 
+          format.html { redirect_to @comentari}
+          format.json { head :no_content }
+        end
+      end
+    else
+      redirect_to '/login'
+    end
+  end
+  
   def comentari_params
     params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
