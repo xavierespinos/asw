@@ -76,6 +76,9 @@ class ContribucionsController < ApplicationController
         if @contribucion.save
           format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
           format.json { render :show, status: :created, location: @contribucion }
+        else
+            format.html { render :new } ## Specify the format in which you are rendering "new" page
+            format.json { render json: @reservation.errors } ## You might want to specify a json format as well
         end
       end
     else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show

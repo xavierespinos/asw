@@ -1,0 +1,15 @@
+<% cache do %>
+  <%= render "menu/menu" %>
+<% end %>
+<tr id="pagespace" title="" style="height:10px"></tr>
+          <tr>
+            <td>
+<table class="itemlist" cellspacing="0" cellpadding="0" border="0">
+  <tr>
+    <td>
+      <% cache do %>
+        <%= render "comentari",  comentaris: @comentaris %>      
+      <% end %>    
+    </td>
+  </tr>
+</table>

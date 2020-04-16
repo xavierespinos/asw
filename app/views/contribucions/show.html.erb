@@ -44,7 +44,7 @@
                           <% end %>
                         <% end %>  
                         <span id="unv_22681207"></span> | <a href="hide?id=22681207&amp;goto=news">hide</a>
-                        | <%= link_to 'comments',comentaris_new_path(:id => @contribucion.id), method: :get %>
+                        | <a href="<%= "/contribucions/#{@contribucion.id}" %>">comments</a>
                       </td>
                     </tr>
                     <tr class="spacer" style="height:5px"></tr>
@@ -106,6 +106,8 @@
         <%end%>
 
       </table>
+              <%= render "comentaris/comentari",  comentaris: @comentaris %>        
+        </table>
     </td>
 </tr>
 

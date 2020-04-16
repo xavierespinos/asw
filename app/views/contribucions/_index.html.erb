@@ -43,20 +43,14 @@
                             <%= link_to 'Destroy', contribucion, method: :delete, data: {confirm: 'Are you sure?'} %>
                           <% end %>
                         <% end %>  
-                        <span id="unv_22681207"></span> | <a href="hide?id=22681207&amp;goto=news">hide</a> | <%= link_to 'comments',comentaris_new_path(:id => contribucion.id), method: :get %>
+                        <span id="unv_22681207"></span> | <a href="hide?id=22681207&amp;goto=news">hide</a> 
+                        | <a href="<%= "/contribucions/#{contribucion.id}" %>">comments</a>
                       </td>
                     </tr>
                     <tr class="spacer" style="height:5px"></tr>
                   </tbody>
                   <% @rank = @rank + 1%>
                 <%end%>
-              
-                <tr class="athing" id="22679138">
-                      <tr class="morespace" style="height:10px"></tr>
-                      <tr>
-                        <td colspan="2"></td>
-                        <td class="title"><a href="news?p=2" class="morelink" rel="next">More</a>
-                        </td>
                 </tr>
             </table>
           </td></tr>

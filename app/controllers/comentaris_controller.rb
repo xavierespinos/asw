@@ -3,19 +3,30 @@ class ComentarisController < ApplicationController
   
   def new
     comentari_id = 0
+    @id_reply = params[:id_comentari]
+    @id_contrib = params[:id_contribucio]
     if params[:comentari_id] != nil then
       comentari_id = params[:comentari_id] 
     end
-    initNew(params[:id],comentari_id,0)
+    initNew(params[:contribucion_id],comentari_id)
   end
 
   def create
-    ::Rails.logger.info "\n***\nVar: #{comentari_params}\n***\n"
     @comentari = Comentari.new(comentari_params)
     @comentari.user_id = current_user.id
-    @comentari.save
-    if @comentari.save
-      initNew(@comentari.contribucion_id,@comentari.comentari_id,1)
+    respond_to do |format|
+      if @comentari.save
+        initNew(@comentari.contribucion_id,@comentari.comentari_id)
+        format.html { redirect_to "/contribucions/#{@comentari.contribucion_id}", notice: 'reply was successfully created.' }
+        format.json { render :show, status: :created, location: @contribucion }
+      else
+        url = "/contribucions/#{@comentari.contribucion_id}"
+        if @comentari.comentari_id != 0 then
+          url += "/comentaris/#{@comentari.comentari_id}"  
+        end
+          format.html { redirect_to url } ## Specify the format in which you are rendering "new" page
+          format.json { render json: @reservation.errors } ## You might want to specify a json format as well
+      end
     end
   end
 
@@ -27,9 +38,23 @@ class ComentarisController < ApplicationController
 
   def destroy
   end
+  
+  def threads
+    idUser = params[:user_id]
+    user = User.find(idUser)
+    @tipo = "#{user.email} threads"
+    @comentari = Comentari.new
+    @comentaris = []
+    @comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
+  end
+
 
   def show
     @comentari = Comentari.find(params[:id])
+    @comentari2 = Comentari.new()
+    @comentari2.user_id = current_user.id
+    @comentari2.contribucion_id = @comentari.contribucion_id
+    @comentari2.comentari_id = @comentari.id
   end
 
   def index
@@ -59,10 +84,9 @@ class ComentarisController < ApplicationController
     params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
 
-  def initNew(contribucion_id,comentari_id,vRender)
-    #::Rails.logger.info "\n***\nID:-------: #{comentari_id}\n***\n"
+  def initNew(contribucion_id,comentari_id)
     @contribucion = Contribucion.find(contribucion_id)
-    @comentari = Comentari.new
+    @comentari = Comentari.new(comentari_params)
     if comentari_id == 0 then
       @comentaris = Comentari.where(contribucion_id: contribucion_id)
     else
@@ -70,9 +94,8 @@ class ComentarisController < ApplicationController
     end
     @comentari.contribucion_id = contribucion_id  
     @comentari.comentari_id = comentari_id 
-    if vRender == 1 then
-       render :new, :locals => {:contribucion => @contribucion, :comentari => @comentari, :comentaris => @comentaris}
-    end
   end
+  
+  
   
 end
