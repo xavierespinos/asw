@@ -2,23 +2,31 @@ class ComentarisController < ApplicationController
   before_action :authenticate_user!
   
   def new
-
     comentari_id = 0
     @id_reply = params[:id_comentari]
     @id_contrib = params[:id_contribucio]
     if params[:comentari_id] != nil then
       comentari_id = params[:comentari_id] 
     end
-    initNew(params[:contribucion_id],comentari_id,0)
+    initNew(params[:contribucion_id],comentari_id)
   end
 
   def create
-    ::Rails.logger.info "\n***\nVar: #{comentari_params}\n***\n"
     @comentari = Comentari.new(comentari_params)
     @comentari.user_id = current_user.id
-    @comentari.save
-    if @comentari.save
-      initNew(@comentari.contribucion_id,@comentari.comentari_id,1)
+    respond_to do |format|
+      if @comentari.save
+        initNew(@comentari.contribucion_id,@comentari.comentari_id)
+        format.html { redirect_to "/contribucions/#{@comentari.contribucion_id}", notice: 'reply was successfully created.' }
+        format.json { render :show, status: :created, location: @contribucion }
+      else
+        url = "/contribucions/#{@comentari.contribucion_id}"
+        if @comentari.comentari_id != 0 then
+          url += "/comentaris/#{@comentari.comentari_id}"  
+        end
+          format.html { redirect_to url } ## Specify the format in which you are rendering "new" page
+          format.json { render json: @reservation.errors } ## You might want to specify a json format as well
+      end
     end
   end
 
@@ -56,7 +64,7 @@ class ComentarisController < ApplicationController
     params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
 
-  def initNew(contribucion_id,comentari_id,vRender)
+  def initNew(contribucion_id,comentari_id)
     @contribucion = Contribucion.find(contribucion_id)
     @comentari = Comentari.new(comentari_params)
     if comentari_id == 0 then
@@ -66,9 +74,6 @@ class ComentarisController < ApplicationController
     end
     @comentari.contribucion_id = contribucion_id  
     @comentari.comentari_id = comentari_id 
-    if vRender == 1 then
-       redirect_to "/contribucions/#{contribucion_id}"
-    end
   end
   
   
