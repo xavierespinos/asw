@@ -5,10 +5,19 @@
    <span class="age">
      <a><%= time_ago_in_words(c.created_at) %></a>
    </span> 
+   <span>
+       <% if type_url(c.contribucion.url) %>
+            <a href="<%=c.contribucion.url%>"><%=c.contribucion.title%></a>
+        <span class="sitebit comhead"> (<a href="<%=c.contribucion.url%>"><span class="sitestr">on: <%=c.contribucion.url%></span></a>)</span>
+      <% else %>
+        <a href="/contribucions/<%=c.contribucion.id%>" class="storylink">on: <%=c.contribucion.title%></a>
+
+      <%end%>
+   </span>
   Comentarios -> <%= c.comentaris.size %>
   <br/>
   <span><%=c.text%></span>
   <br/>
-  <a style="color: #828282;" href="/contribucions/<%=c.id%>/comentaris/<%=c.id%>">reply</a>
+  <a style="color: #828282;" href="/contribucions/<%=c.contribucion_id%>/comentaris/<%=c.id%>">reply</a>
 </li>
  
