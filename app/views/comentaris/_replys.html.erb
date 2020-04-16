@@ -13,25 +13,7 @@
           <br/>
           <a style="color: #828282;" href="/contribucions/<%=r.id%>/comentaris/<%=r.id%>">reply</a>
           </li>
-            <% if !r.comentaris.nil? %>
-              <ul>
-                <% r.comentaris.each do |c| %>
-                    <li style="list-style:none;">
-                     <a style="color: #828282;" href="#">▲</a>
-                     <a style="color: #828282;" href="#"> <%= c.user.email %> </a>
-                     <span class="age">
-                       <a href="item?id=22856013"><%= time_ago_in_words(c.created_at) %></a>
-                     </span> 
-                     Comentarios -> <%= c.comentaris.size %>
-                    <br/>
-                    <span><%=c.text%></span>
-                    <br/>
-                    <a style="color: #828282;" href="/contribucions/<%=c.id%>/comentaris/<%=c.id%>">reply</a>
-                  </li>
-                  <%= render "comentaris/replys",  replys: c.comentaris %>
-                <%end%>
-              </ul>
-            <%end%>
+          <%= render "comentaris/replys",  replys: r.comentaris %>
     <% end %>
   </ul>
 <% end %>

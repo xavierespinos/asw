@@ -46,13 +46,14 @@
                                         
                                             <td>
                                                 <br>
+                                                
                                                 <%= form_with(model: @comentari2, local: true) do |form| %>
                                                 <% if @comentari2.errors.any? %>
                                                   <div id="error_explanation">
                                                     <h2><%= pluralize(@comentari2.errors.count, "error") %> prohibited this comentari from being saved:</h2>
                                               
                                                     <ul>
-                                                      <% @comentari.errors.full_messages.each do |message| %>
+                                                      <% @comentari2.errors.full_messages.each do |message| %>
                                                         <li><%= message %></li>
                                                       <% end %>
                                                     </ul>
