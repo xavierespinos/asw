@@ -1,0 +1,5 @@
+class AddCommentableToComentaris < ActiveRecord::Migration[6.0]
+  def change
+    add_reference :comentaris, :commentable, polymorphic: true
+  end
+end
