@@ -1,0 +1,12 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: HackerNews
+  description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
+servers:
+  - url: ''
+paths:
+  "falta per completar"
+components:
+  schemas:
+    "falta per completar"
