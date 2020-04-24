@@ -1,0 +1,8 @@
+<% if !replys.nil? %>
+  <ul>  
+    <% replys.each do |r| %>
+        <%= render "comentaris/comentari",  c: r %>
+        <%= render "comentaris/replys",  replys: r.comentaris %>
+    <% end %>
+  </ul>
+<% end %>

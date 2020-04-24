@@ -1,0 +1,17 @@
+<table>
+  <tr>
+    <td>
+
+    <% if !@comentaris.nil? %>
+      <ul>  
+        <% @comentaris.each do |c| %>
+          <% if c.comentari_id == 0 %>
+            <%= render "comentaris/comentari",  c: c %>
+            <%= render "comentaris/replys",  replys: c.comentaris %>
+          <% end %>  
+        <% end %>
+      </ul>
+    <% end %>
+    </td>
+  </tr>
+</table>

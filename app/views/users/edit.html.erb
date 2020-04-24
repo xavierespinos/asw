@@ -1,0 +1,7 @@
+<h1>Editing User</h1>
+
+<%= render partial: 'form', locals: {user: @user}%>
+
+<%= link_to 'Save', @user, method: :update %> |
+<a href="/users/<%= current_user().id %>">Back</a>
+

@@ -1,0 +1,27 @@
+
+  <%= render "menu/menu" %>
+
+<tr id="pagespace" title="" style="height:10px"></tr>
+          <tr>
+            <td>
+              <table class="itemlist" cellspacing="0" cellpadding="0" border="0">
+                <%= render "contribucion",  contribucion: @contribucion %>
+                <tr>
+                      <td colspan="2"></td>
+                     <td>
+                        <%= @contribucion.text%>
+                        <br>
+                        <br>
+                        <%= form_tag :action => "comment", :id => @contribucion %>
+                        <textarea name="content" id="comment_content" rows="6" cols="60"></textarea></br>
+                        <%= submit_tag "add a comment" %>
+                        </form>
+                    </td>
+                   </tr> 
+              <%= render "comentaris/comentaris",  comentaris: @comentaris %>        
+        </table>
+    </td>
+</tr>
+
+
+ 
