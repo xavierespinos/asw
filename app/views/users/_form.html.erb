@@ -23,12 +23,17 @@
   
   <div class="field">
     <%= form.label :password %>
-    <%= form.text_field :password %>
+    <%= form.password_field :password %>
   </div>
   
   <div class="field">
     <%= form.label :repeatpassword, 'Repeat Password' %>
-    <%= form.text_field :repeatpassword %>
+    <%= form.password_field :repeatpassword %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description, 'Description' %>
+    <%= text_area(:description, :text, size: "70x5") %>
   </div>
 
   <div class="actions">

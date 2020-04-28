@@ -1,4 +1,4 @@
-# README
+# ASW HackerNews API REST
 
 Adrian Alvarez
 
@@ -10,4 +10,4 @@ Sergio Pascual
 
 Xavier Espinos
 
-HEROKU: https://limitless-tundra-31400.herokuapp.com/
+HEROKU: https://warm-brook-49448.herokuapp.com/

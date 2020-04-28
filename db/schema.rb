@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_04_15_155547) do
+=======
+ActiveRecord::Schema.define(version: 2020_04_17_173055) do
+>>>>>>> b974f634c74c5372134c945da77661d85c1c4970
 
   create_table "comentaris", force: :cascade do |t|
     t.string "text", null: false
@@ -19,7 +23,13 @@ ActiveRecord::Schema.define(version: 2020_04_15_155547) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+<<<<<<< HEAD
     t.integer "points", default: 0
+=======
+    t.string "commentable_type"
+    t.integer "commentable_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comentaris_on_commentable_type_and_commentable_id"
+>>>>>>> b974f634c74c5372134c945da77661d85c1c4970
   end
 
   create_table "contribucions", force: :cascade do |t|
@@ -45,6 +55,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_155547) do
     t.datetime "remember_created_at"
     t.string "provider"
     t.string "uid"
+    t.string "description"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

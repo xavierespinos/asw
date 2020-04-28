@@ -1,12 +1,11 @@
 class Contribucion < ApplicationRecord
-  has_one :user
   has_many :comentaris
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
 	validate :needAskOrURL
 	validates :title, presence: true
 	validate :uri?
-	has_one :user
+	belongs_to :user
   #validates_uniqueness_of :url
   
   def uri?
