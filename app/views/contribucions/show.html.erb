@@ -5,51 +5,8 @@
           <tr>
             <td>
               <table class="itemlist" cellspacing="0" cellpadding="0" border="0">
-                <tbody>
-      
-                    <tr class="athing" id="22681207">
-                      <td class="title" valign="top" align="right">
-                      </td>      
-                    <td class="votelinks" valign="top">
-                      <center>
-                        <a id="up_22681207" <%= link_to '▲', upvote_contribucion_path(@contribucion), method: :put %>
-                        </a>
-                      </center>
-                    </td>
-                      <td class="title">
-                        <% if type_url(@contribucion.url) %>
-                          <a href="<%=@contribucion.url%>"><%=@contribucion.title%></a>
-                          <span class="sitebit comhead"> (<a href="<%=@contribucion.url%>"><span class="sitestr"><%=@contribucion.url%></span></a>)</span>
-                        <% else %>
-                          <a href="/contribucions/<%=@contribucion.id%>" class="storylink"><%=@contribucion.title%></a>
-                          
-                        <%end%>
-                      
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2"></td>
-                      <td class="subtext">
-                      <span class="score" id="score_22681207"><%=@contribucion.points%> points</span>
-                        by 
-                        <a href="/users/<%=@contribucion.user_id%>" class="hnuser">hardcoded</a> 
-                        <span class="age">
-                           <%= time_ago_in_words(@contribucion.created_at) %>
-                        </span>
-                        <% if current_user() != nil %>
-                          <% if @contribucion.user_id == current_user().id %>
-                            <%= link_to 'Edit', edit_contribucion_path(@contribucion) %>
-                            |
-                            <%= link_to 'Destroy', @contribucion, method: :delete, data: {confirm: 'Are you sure?'} %>
-                          <% end %>
-                        <% end %>  
-                        <span id="unv_22681207"></span> | <a href="hide?id=22681207&amp;goto=news">hide</a>
-                        | <a href="<%= "/contribucions/#{@contribucion.id}" %>">comments</a>
-                      </td>
-                    </tr>
-                    <tr class="spacer" style="height:5px"></tr>
-                    <tr style="height:2px"></tr>
-                   <tr>
+                <%= render "contribucion",  contribucion: @contribucion %>
+                <tr>
                       <td colspan="2"></td>
                      <td>
                         <%= @contribucion.text%>
@@ -61,55 +18,7 @@
                         </form>
                     </td>
                    </tr> 
-                </tbody>
-                <% if !@comentaris.nil? %>
-                   <% @comentaris.each do |c| %>
-                     <tr>
-                        <td class="ind"><img src="s.gif" width="0" height="1"></td>
-                        
-                        <td class="votelinks" valign="top">
-                          <center>
-                            <a id="up_22681207" <%= link_to '▲', upvote_comentari_path(c, :lloc => "show"), method: :put %>
-                            </a>
-                          </center>
-                        </td>
-                        <td class="default">
-                          <div style="margin-top:2px; margin-bottom:-10px;">
-                             <span class="score" id="score_22681207"><%=c.points%> points</span>
-                            <span class="comhead">
-                              <a href="/users/<%= c.user_id%>" class="hnuser"><%=c.user_id%></a> 
-                            <span class="age">
-                              <a href="item?id=22856013"><%= time_ago_in_words(c.created_at) %></a>
-                            </span> 
-                            <span id="unv_22856013"></span>
-                              <span class="par"></span> 
-                              <a class="togg" n="1" href="javascript:void(0)" onclick="return toggle(event, 22856013)">[-]</a>          
-                              <span class="storyon"></span>
-                            </span>
-                          </div>
-                            <br>
-                            <div class="comment">
-                              <span class="commtext c00"> <%=c.text%></span>
-                            <div class="reply">       
-                              <p>
-                                <font size="1">
-                                    
-                                    <a href="/contribucions/<%=@contribucion.id%>/comentaris/<%=c.id%>/">reply</a>
-                                </font>
-                              </p>
-                            </div>
-                            </span>
-                            </div>
-                            </td>
-                  <%end%>
-            </tr>
-        <%end%>
-
-      </table>
-              <%= render "comentaris/comentari",  comentaris: @comentaris %>        
+              <%= render "comentaris/comentaris",  comentaris: @comentaris %>        
         </table>
     </td>
 </tr>
-
-
- 
