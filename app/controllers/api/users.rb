@@ -1,0 +1,11 @@
+class Api::Users < Api::BaseController
+  
+  def show
+    
+  end
+  
+  def update
+    
+  end
+  
+end
