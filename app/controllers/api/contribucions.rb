@@ -61,6 +61,21 @@ class Api::Contribucions < Api::BaseController
     end
   end
   
+  def downvote
+    if !params[:apiKey].nil?
+      @points = @contribucion.points - 1
+      @contribucion = Contribucion.find(params[:id])
+      @contribucion.update_attribute(:points, @points) 
+      respond_to do |format|
+        format.json{ render json: @contribucion, status: 200 }
+      end
+    else 
+      respond_to do |format|
+        format.json { render status: :method_not_allowed }
+      end
+    end
+  end
+  
   def create
     if !params[:apiKey].nil?
       @param = contribucion_params[:url]

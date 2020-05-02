@@ -54,6 +54,12 @@ post '/contribucions/:contribucion_id/comentaris/new', to: 'comentaris#new'
     end
   end
   
+    resources :contribucions do
+    member do
+      put 'downvote'
+    end
+  end
+  
   resources :comentaris do
     member do
       put 'upvote'

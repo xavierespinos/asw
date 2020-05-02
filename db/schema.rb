@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_173055) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "commentable_type"
     t.integer "commentable_id"
+    t.integer "points", default: 0
     t.index ["commentable_type", "commentable_id"], name: "index_comentaris_on_commentable_type_and_commentable_id"
   end
 
