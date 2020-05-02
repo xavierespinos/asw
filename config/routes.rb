@@ -2,15 +2,15 @@ Rails.application.routes.draw do
   
 scope "/api",defaults: {format: 'json'} do
 
-  get '/contribucions' =>'api/contribucions#all' # get de totes les contribucions
-  get '/asks' =>'api/contribucions#asks' # get de tots els asks
-  get '/news' =>'api/contribucions#news'# get de tots els news
+  get '/contribucions' =>'api/contribucions#all' # get de totes les contribucions FET
+  get '/asks' =>'api/contribucions#asks' # get de tots els asks FET
+  get '/news' =>'api/contribucions#news'# get de tots els news FET
   
-  get '/contribucions/:id' =>'api/contribucions#show' # get d'una contribucio
-  get '/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio
-  post '/contribucions' =>'api/contribucions#new' # post d'una contribucio
+  get '/contribucions/:id' =>'api/contribucions#show' # get d'una contribucio FET
+  get '/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio FET
+  post '/contribucions' =>'api/contribucions#new' # post d'una contribucio FET
   post '/contribucions/:id' =>'api/comentaris#new' # post d'un comentari
-  post '/contribucions/:id/vote' =>'api/contribucions#upvote' # post d'un vote
+  post '/contribucions/:id/vote' =>'api/contribucions#upvote' # post d'un vote FET
   delete '/contribucions/:id/vote' =>'api/contribucions#downvote' # delete d'un vote
 
   get '/users/:id' => 'api/users#show' # get info usuari
@@ -27,7 +27,7 @@ scope "/api",defaults: {format: 'json'} do
 
 
   get '/comentaris/user/:id' =>'api/comentaris#fromuser' # get comentaris d'un usuari
-  get '/contribucions/user/:id' =>'api/contribucions#fromuser' # get de totes les contribucions de l'usuari
+  get '/contribucions/user/:id' =>'api/contribucions#fromuser' # get de totes les contribucions de l'usuari FET
   get '/comentaris/upvoted/user/:id' =>'api/comentaris#upvotedfdromuser' # get comentaris votats d'un usuari
   get '/contribucions/upvoted/user/:id' =>'api/contribucions#upvotedfdromuser' # get de totes les contribucions votades per l'usuari
 

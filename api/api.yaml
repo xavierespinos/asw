@@ -1,12 +1,63 @@
 openapi: 3.0.1
 info:
-  version: 1.0.0
+  version: '1.0.0'
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: ''
+  - url: 'https://warm-brook-49448.herokuapp.com/'
 paths:
-  "falta per completar"
+  "/contribucions":
+    get:
+      summary: All Contribution
+      description: Returns all contributions that are contains content
+      tags:
+      - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
 components:
   schemas:
-    "falta per completar"
+    Contribution:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the submission
+        title:
+          type: string
+          description: Name of the submission
+        url:
+          type: string
+          description: adress to the new
+        content:
+          type: string
+          description: Message
+        tipo:
+          type: string
+          description: Type of submission
+        ncomments:
+          type: number
+          format: int32
+          description: Number of comments in the submission
+        nvotes:
+          type: number
+          format: int32
+          description: Number of votes
+        author_id:
+          type: number
+          format: int32
+          description: Identifier of the user owner
+        timestamp:
+          type: string
+          description: Datetime when the submission was created
+        comments:
+          type: array
+          items:
+            type: number

@@ -5,7 +5,7 @@ describe 'Hackersnews API' do
 
   path '/apps/controllers/api/contribucions/{id}' do
 
-    get 'Retrieves a contribution' do
+    get 'Retorna totes les contribucions' do
       tags 'Contribucions'
       produces 'application/json', 'application/xml'
       parameter name: :id, :in => :path, :type => :string

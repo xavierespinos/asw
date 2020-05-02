@@ -6,7 +6,7 @@ info:
 paths:
   "/apps/controllers/api/contribucions/{id}":
     get:
-      summary: Retrieves a contribution
+      summary: Retrieves a contribution!!!!
       tags:
       - Contribucions
       parameters:
