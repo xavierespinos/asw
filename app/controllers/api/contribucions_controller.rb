@@ -24,7 +24,10 @@ class Api::ContribucionsController < Api::BaseController
   # GET /contribucions/api/contribucions/1
   # GET /contribucions/1.json
   def show
-    render json: @contribucion
+    @contribucion = Contribucion.find(params[:id])
+    respond_to do |format|
+      format.json { render json: @contribucion}
+    end
   end
   
   # GET /contribucions/api/contribucions/1
@@ -47,23 +50,23 @@ class Api::ContribucionsController < Api::BaseController
           @contribucion.tipo = "url"
         end
         respond_to do |format|
-          @contribucion.user_id= User.find_by_apiKey(params[:apiKey]).id
+          @contribucion.user_id= current_user().id
           if @contribucion.save
-            format.json { render :show, status: :created, json: @submission }
+            format.json { render :show, status: :created, json: @contribucion }
           else
-            format.json { render json: @submission.errors, status: :unprocessable_entity }
+            format.json { render json: @contribucion.errors, status: :unprocessable_entity }
           end
         end
       else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
         respond_to do |format|
           @contribucion = Contribucion.all.select{|c| c.url == @param}  
-          format.json { render :show, json: @submission }
+          format.json { render :show, json: @contribucion }
         end
       end
       end
     else
       respond_to do |format|
-        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
+         format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
       end
     end
   end
@@ -78,7 +81,7 @@ class Api::ContribucionsController < Api::BaseController
       end
     else 
       respond_to do |format|
-        format.json { render status: :method_not_allowed }
+        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
       end
     end
   end
@@ -111,9 +114,9 @@ class Api::ContribucionsController < Api::BaseController
         respond_to do |format|
           @contribucion.user_id= User.find_by_apiKey(params[:apiKey]).id
           if @contribucion.save
-            format.json { render :show, status: :created, json: @submission }
+            format.json { render :show, status: :created, json: @contribucion }
           else
-            format.json { render json: @submission.errors, status: :unprocessable_entity }
+            format.json { render json: @contribucion.errors, status: :unprocessable_entity }
           end
         end
       else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
@@ -143,7 +146,7 @@ class Api::ContribucionsController < Api::BaseController
   
   def fromuser
     @contribucions = Contribucion.where(user_id:params[:id])
-    if @submissions.count > 0
+    if @contribucions.count > 0
       respond_to do |format|
         format.json { render json: @contribucions.to_json(), status: 200}
       end

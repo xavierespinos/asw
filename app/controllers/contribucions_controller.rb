@@ -115,7 +115,7 @@ class ContribucionsController < ApplicationController
     end
   end
   
-  #PUT /contribucions/1/upVote
+  #PUT /contribucions/1/downvote
   def downvote
     @points = @contribucion.points - 1
     
@@ -135,7 +135,7 @@ class ContribucionsController < ApplicationController
     end
   end
   
-    #PUT /contribucions/1/upVote
+  #PUT /contribucions/1/uptvote
   def upvote
     @points = @contribucion.points + 1
     if !current_user().nil?
