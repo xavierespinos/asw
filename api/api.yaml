@@ -21,8 +21,65 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
+    post:
+      summary: Crea un post
+      tags: 
+      - Contributions
+      parameters: 
+      - name: title
+        in: path
+        description: Titol de la contribucio
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: url
+        in: path
+        description: url de la contribucio
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: text
+        in: path
+        description: text de la contribucio
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: apiKey
+        in: path
+        description: apiKey del usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        404:
+          description: Method not found
+          
+          
 components:
   schemas:
+    UserWithoutDetails:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the user
+        email:
+          type: string
+          description: email of the user
+        apiKey:
+          type: string
+          description: secret apiKey of the user
     Contribution:
       type: object
       properties:

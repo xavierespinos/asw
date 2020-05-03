@@ -1,4 +1,4 @@
-class Api::Contribucions < Api::BaseController
+class Api::ContribucionsController < Api::BaseController
   
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
@@ -38,11 +38,33 @@ class Api::Contribucions < Api::BaseController
   # POST /contribucions/1.json
   def new
     if !params[:apiKey].nil?
-     @contribucion = Contribucion.new
-     @contribucion.user_id = current_user.id
-      render json: @contribucion
-    else 
-      format.json { render status: :method_not_allowed }
+      @param = contribucion_params[:url]
+      if @param == "" or (@param != "" and !Contribucion.exists?(url: @param)) #si es un text o url nou el guarda
+        @contribucion = Contribucion.new(contribucion_params)
+        if @contribucion.url.empty?
+          @contribucion.tipo = "ask"
+        else
+          @contribucion.tipo = "url"
+        end
+        respond_to do |format|
+          @contribucion.user_id= User.find_by_apiKey(params[:apiKey]).id
+          if @contribucion.save
+            format.json { render :show, status: :created, json: @submission }
+          else
+            format.json { render json: @submission.errors, status: :unprocessable_entity }
+          end
+        end
+      else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
+        respond_to do |format|
+          @contribucion = Contribucion.all.select{|c| c.url == @param}  
+          format.json { render :show, json: @submission }
+        end
+      end
+      end
+    else
+      respond_to do |format|
+        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
+      end
     end
   end
   
@@ -97,7 +119,7 @@ class Api::Contribucions < Api::BaseController
       else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
         respond_to do |format|
           @contribucion = Contribucion.all.select{|c| c.url == @param}  
-          format.json { render :show, json: @submission }
+          format.json { render json: @reservation.errors } 
         end
       end
       end
@@ -130,6 +152,10 @@ class Api::Contribucions < Api::BaseController
         format.json { render json: {errors: 'No content'}, status: :no_content}
       end
     end
+  end
+  
+  def contribucion_params
+      params.require(:contribucion).permit(:user_id, :title, :url, :text)
   end
   
 end

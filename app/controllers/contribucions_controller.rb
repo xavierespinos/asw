@@ -117,7 +117,7 @@ class ContribucionsController < ApplicationController
   
   #PUT /contribucions/1/upVote
   def downvote
-    @points = @contribucion.points + 1
+    @points = @contribucion.points - 1
     
     if !current_user().nil?
       respond_to do |format|
@@ -135,10 +135,9 @@ class ContribucionsController < ApplicationController
     end
   end
   
-    #PUT /contribucions/1/downVote
+    #PUT /contribucions/1/upVote
   def upvote
-    @points = @contribucion.points - 1
-    
+    @points = @contribucion.points + 1
     if !current_user().nil?
       respond_to do |format|
         @contribucion.update_attribute(:points, @points) 

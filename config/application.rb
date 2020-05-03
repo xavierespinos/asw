@@ -16,11 +16,10 @@ module Hackersnews
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     
-    config.middleware.use Rack::Cors do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "*"
-        resource "*", headers: :any, methods: [:get, 
-            :post, :put, :delete, :options]
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :options]
       end
     end
     

@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
     def hello
-    render html: "hello, world!"
+        redirect_to '/contribucions'
     end
-    
 end
