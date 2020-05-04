@@ -95,7 +95,6 @@ class ComentarisController < ApplicationController
     @comentari.contribucion_id = contribucion_id  
     @comentari.comentari_id = comentari_id 
   end
-  
-  
+
   
 end

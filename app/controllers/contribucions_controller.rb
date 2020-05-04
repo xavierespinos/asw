@@ -1,34 +1,33 @@
 class ContribucionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :newPage]
+  before_action :authenticate_user!, except: [:index, :newPage,:getAllContribucio,:getAllContribucioAsk,:getAllContribucioUrl,:addContribucio,:addComment,:getUser,:getContribucioById]
   before_action :set_contribucion, only: [:show, :edit, :update, :destroy, :upvote]
 
   # GET /contribucions
   # GET /contribucions.json
   def index
-    @contribucions = Contribucion.all.select{|c| c.url != ""}  
+    @contribucions = getAllContribucioUrl
   end
-  
-  
+
   # GET /contribucions/askPage
   # GET /contribucions/askPage.json
   def askPage
-    @contribucions = Contribucion.all.select{|c| c.text != ""}
+    @contribucions = getAllContribucioAsk
     render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end
-  
+
   # GET /contribucions/newPage
   # GET /contribucions/newPage.json
   def newPage
-    @contribucions = Contribucion.all.order("created_at DESC")
+    @contribucions = getAllContribucio
     render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end
-  
+
   def submitted
     #::Rails.logger.info "\n***\nVar: #{idUser}\n***\n"
     idUser = params[:id]
-    user = User.find(idUser)
+    user = getUser(idUser)
     @tipo = "#{user.email} submissions"
-    @contribucions = Contribucion.where("user_id = ?", idUser)
+    @contribucions = getContribucionsUser(idUser)
     render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end
 
@@ -50,30 +49,26 @@ class ContribucionsController < ApplicationController
   
   def comment
     if !current_user().nil?
-      @user_id = current_user().id
-      @contribucion = Contribucion.find(params[:id])
-      @comment = @contribucion.comentaris.create(text: params[:content], user_id: @user_id)
+      idUser = current_user().id
+      idContribucion = params[:id]
+      content = params[:content]
+      @comment = addComment(idUser,idContribucion,content)
       flash[:notice] = "Added your comment"
       redirect_to :action => "show", :id => params[:id]
     else
       redirect_to '/login'
     end
   end
-  
+
   # POST /contribucions
   # POST /contribucions.json
   def create
     @param = contribucion_params[:url]
-    if @param == "" or (@param != "" and !Contribucion.exists?(url: @param)) #si es un text o url nou el guarda
+    if @param == "" or !Contribucion.exists?(url: @param) #si es un text o url nou el guarda
       @contribucion = Contribucion.new(contribucion_params)
-      if @contribucion.url.empty?
-        @contribucion.tipo = "ask"
-      else
-        @contribucion.tipo = "url"
-      end
+      @contribucion.user_id = current_user().id
       respond_to do |format|
-        @contribucion.user_id= current_user().id
-        if @contribucion.save
+        if addContribucio(@contribucion)
           format.html { redirect_to @contribucion, notice: 'Contribucion was successfully created.' }
           format.json { render :show, status: :created, location: @contribucion }
         else
@@ -81,13 +76,12 @@ class ContribucionsController < ApplicationController
             format.json { render json: @reservation.errors } ## You might want to specify a json format as well
         end
       end
-    else if @param != "" and Contribucion.exists?(url: @param) #si url existeix fa el show
+    else #si url existeix fa el show
       respond_to do |format|
-        @contribucion = Contribucion.all.select{|c| c.url == @param}  
+        @contribucion = getContribucioByUrl(@param)
         format.html { redirect_to @contribucion}
         format.json { render :show, status: :created, location: @contribucion}
       end
-    end
     end
   end
 
@@ -118,7 +112,7 @@ class ContribucionsController < ApplicationController
   #PUT /contribucions/1/downvote
   def downvote
     @points = @contribucion.points - 1
-    
+
     if !current_user().nil?
       respond_to do |format|
         @contribucion.update_attribute(:points, @points) 
@@ -153,7 +147,62 @@ class ContribucionsController < ApplicationController
       redirect_to '/login'
     end
   end
-  
+
+  def getAllContribucioUrl
+    return Contribucion.all.select{|c| c.url != ""}
+  end
+
+  def getAllContribucioAsk
+    return Contribucion.all.select{|c| c.text != ""}
+  end
+
+  def getAllContribucio
+    return Contribucion.all.order("created_at DESC")
+  end
+
+  def getUser(idUser)
+    return User.find(idUser)
+  end
+
+  def getContribucionsUser(idUser)
+    return Contribucion.where("user_id = ?", idUser)
+  end
+
+  def addComment(idUser,idContribucion,content)
+    contribucion = getContribucioById(idContribucion)
+    return contribucion.comentaris.create(text: content, user_id: idUser)
+  end
+
+  def deleteContribucio(idContribucio,idUser)
+    c = Contribucion.where(id: idContribucio, user_id: idUser).limit(1)
+    if c[0].nil?
+      return false
+    else
+      return c[0].destroy
+    end
+  end
+
+  def getContribucioByUrl(contUrl)
+    return Contribucion.all.select{|c| c.url == @param}
+  end
+
+  def getContribucioById(idContribucion)
+    return Contribucion.find(idContribucion)
+  end
+
+  def addContribucio(contribucion)
+    if contribucion.url.empty?
+      contribucion.tipo = "ask"
+    else
+      contribucion.tipo = "url"
+    end
+    return contribucion.save
+  end
+
+  def getComentarisContribucio(idContribucio)
+    return Comentari.where("contribucion_id = ?", idContribucio)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribucion
@@ -164,5 +213,6 @@ class ContribucionsController < ApplicationController
     def contribucion_params
       params.require(:contribucion).permit(:user_id, :title, :url, :text)
     end
-    
+
 end
+
