@@ -4,9 +4,110 @@ info:
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: 'https://warm-brook-49448.herokuapp.com/'
+  - url: 'http://52.87.155.191:8080'
 paths:
-  "/contribucions":
+
+  /users:
+    post:
+      summary: Create new user
+      description: Crete new user
+      tags: 
+      - Users
+      parameters: 
+      - name: name
+        in: path
+        description: Nom de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: email
+        in: path
+        description: Mail de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: password
+        in: path
+        description: Password de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: password_confirmation
+        in: path
+        description: Verificacio de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutDetails'
+  /users/{id}:
+    get:
+      summary: Show an User
+      description: Return information of userId
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        description: id from user
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update an user
+      description: Return information of userId
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        description: id from user
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: description
+        in: path
+        description: new description for user
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: apiKey
+        in: query
+        description: apiKey of the user, showd correspond with the id
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    
+      
+
+  /contribucions:
     get:
       summary: All Contribution
       description: Returns all contributions that are contains content
@@ -22,7 +123,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Contribution'
     post:
-      summary: Crea un post
+      summary: New post
       tags: 
       - Contributions
       parameters: 
@@ -49,7 +150,7 @@ paths:
           format: string
       - name: apiKey
         in: path
-        description: apiKey del usuari
+        description: api de l'usuari
         required: true
         schema:
           type: string
@@ -63,8 +164,91 @@ paths:
                 $ref: '#/components/schemas/Contribution'
         404:
           description: Method not found
-          
-          
+      
+  /contribucions/ask:
+    get:
+      summary: All Ask Contributions
+      description: Returns all contributions that are tipe ask
+      tags:
+      - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+                  
+  /contribucions/news:
+    get:
+      summary: All News Contributions
+      description: Returns all contributions that are tipe new
+      tags:
+      - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+                  
+  /contribucions/{id}:
+    
+    get:
+      summary: Show a Contribution
+      description: Returns a contribution
+      tags:
+      - Contributions
+      parameters: 
+      - name: id
+        in: path
+        description: id from contribution
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+    delete:
+      summary: Deletes a Contribution
+      description: Deletes a contribution
+      tags:
+      - Contributions
+      parameters: 
+      - name: id
+        in: path
+        description: id from contribution
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: apiKey
+        in: path
+        description: api de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+      
+  
+  
 components:
   schemas:
     UserWithoutDetails:
@@ -80,6 +264,26 @@ components:
         apiKey:
           type: string
           description: secret apiKey of the user
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the user
+        username:
+          type: string
+          description: Username of the user
+        email:
+          type: string
+          description: email of the user
+        about:
+          type: string
+          description: about
+        timestamp:
+          type: string
+          description: Datetime when the user was created
+    
     Contribution:
       type: object
       properties:
