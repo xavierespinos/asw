@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params_edit)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -69,6 +69,10 @@ class UsersController < ApplicationController
   def getId
     return 1
   end
+  
+  def getUserById(idUser)
+    return User.find(idUser)
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -80,4 +84,9 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email)
     end
+    
+    def user_params_edit
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :about)
+    end
+    
 end
