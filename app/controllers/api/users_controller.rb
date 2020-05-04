@@ -1,10 +1,12 @@
 class Api::Users < Api::BaseController
+  before_action :set_controllers
+  before_action :set_user
   
   # GET /users/1
   # GET /users/1.json
   def show
     idUser = params[:id]
-    result(@UsersController.getUserById(idUser))
+    result(@usersController.getUserById(idUser))
   end
   
   # PATCH/PUT /users/1
@@ -32,6 +34,14 @@ class Api::Users < Api::BaseController
   
     def user_params_edit
       params.permit(:name, :email, :password, :password_confirmation, :about)
+    end
+    
+    def set_controllers
+      @usersController = UsersController.new
+    end
+    
+    def set_user
+      @user = User.find(params[:id])
     end
   
 end
