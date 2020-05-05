@@ -1,6 +1,7 @@
 class Api::ContribucionsController < Api::BaseController
   before_action :set_controllers
 
+  #---------------------------------------------- Probado ----------------------------------------------#
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def all
@@ -45,9 +46,10 @@ class Api::ContribucionsController < Api::BaseController
   # POST /contribucions/api/contribucions/1
   # POST /contribucions/1.json
   def new
-     if @usersController.isLogged
+     if @usersController.isValidApiToken(getApiKey)
        if !@contribucionsController.getContribucioByUrl(contribucion_params[:url]).nil?
          contribucio = Contribucion.new(contribucion_params)
+         contribucio.user_id = @usersController.getUserByApiToken(getApiKey).id
          if @contribucionsController.addContribucio(contribucio)
            render json: contribucio, status: :ok
          else
@@ -57,14 +59,14 @@ class Api::ContribucionsController < Api::BaseController
          render json: {error: 'Contribucio url exist'}, status: :bad_request
        end
      else
-       render json: {error: 'need login'}, status: :unauthorized
+       render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
      end
   end
 
   def destroy
-    if @usersController.isLogged
+    if @usersController.isValidApiToken(getApiKey)
       idContribucio = params[:id]
-      idUser = @usersController.getId
+      idUser = @usersController.getUserByApiToken(getApiKey).id
       if @contribucionsController.deleteContribucio(idContribucio,idUser)
         render json: {ok: 'ok'} , status: :ok
       else
@@ -74,10 +76,11 @@ class Api::ContribucionsController < Api::BaseController
       render json: {error: 'need login'}, status: :unauthorized
     end
   end
+  #--------------------------------------------------------------------------------------------------------------#
 
-  #---------------------------------------------- Probado hasta aquí ----------------------------------------------#
+  #---------------------------------------------- Pendiente probar ----------------------------------------------#
   def upvote
-    if !params[:apiKey].nil?
+    if @usersController.isValidApiToken(getApiKey)
       @points = @contribucion.points + 1
       @contribucion = Contribucion.find(params[:id])
       @contribucion.update_attribute(:points, @points) 
@@ -92,7 +95,7 @@ class Api::ContribucionsController < Api::BaseController
   end
   
   def downvote
-    if !params[:apiKey].nil?
+    if @usersController.isValidApiToken(getApiKey)
       @points = @contribucion.points - 1
       @contribucion = Contribucion.find(params[:id])
       @contribucion.update_attribute(:points, @points) 
@@ -106,7 +109,9 @@ class Api::ContribucionsController < Api::BaseController
     end
   end
 
+  #-----------------------------------------------------------------------------------------------------#
 
+  #---------------------------------------------- Probado ----------------------------------------------#
   private
 
   def resultListFind(list)
@@ -131,8 +136,20 @@ class Api::ContribucionsController < Api::BaseController
     @usersController = UsersController.new
   end
 
+  def getApiKey()
+    result = ""
+    begin
+      if request.headers["apiKey"] != ""
+        result =  request.headers["apiKey"]
+      end
+    rescue
+    end
+    return result
+  end
+
   def contribucion_params
     params.require(:contribucion).permit(:user_id, :title, :url, :text)
   end
 
+  #--------------------------------------------------------------------------------------------#
 end

@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_173055) do
+ActiveRecord::Schema.define(version: 2020_05_05_164924) do
 
   create_table "comentaris", force: :cascade do |t|
     t.string "text", null: false
-    t.integer "contribucion_id", null: false
+    t.integer "discor", null: false
     t.integer "comentari_id", default: 0, null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_173055) do
     t.string "provider"
     t.string "uid"
     t.string "description"
+    t.string "apitoken"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

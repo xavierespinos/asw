@@ -28,8 +28,18 @@ class Api::Users < Api::BaseController
       render json: element, status: :ok
     end
   end
-  
-  
+
+  def getApiKey()
+    result = ""
+    begin
+      if request.headers["apiKey"] != ""
+        result =  request.headers["apiKey"]
+      end
+    rescue
+    end
+    return result
+  end
+
   private
   
     def user_params_edit

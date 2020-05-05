@@ -62,17 +62,27 @@ class UsersController < ApplicationController
     end
   end
 
-  def isLogged
-    return true
+  def isValidApiToken(apiKey)
+    if apiKey != ""
+      result = User.exists?(apitoken: apiKey)
+    else
+      result = false
+    end
+    return result
   end
 
-  def getId
-    return 1
+  def getUserByApiToken(apiKey)
+    if isValidApiToken(apiKey)
+      return User.where(apitoken: apiKey).limit(1).first
+    else
+      return nil
+    end
   end
   
   def getUserById(idUser)
     return User.find(idUser)
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
