@@ -1,47 +1,49 @@
 openapi: 3.0.1
+
 info:
   version: '1.0.0'
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: 'http://52.207.235.212:8080'
+  - url: 'http://127.0.0.1:3000/api'
+
 paths:
 
   /users:
     post:
       summary: Create new user
       description: Crete new user
-      tags: 
-      - Users
-      parameters: 
-      - name: name
-        in: path
-        description: Nom de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: email
-        in: path
-        description: Mail de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: password
-        in: path
-        description: Password de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: password_confirmation
-        in: path
-        description: Verificacio de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
+      tags:
+        - Users
+      parameters:
+        - name: name
+          in: path
+          description: Nom de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: email
+          in: path
+          description: Mail de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: password
+          in: path
+          description: Password de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: password_confirmation
+          in: path
+          description: Verificacio de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -49,21 +51,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserWithoutDetails'
-                
+
   /users/{id}:
     get:
       summary: Show an User
       description: Return information of userId
       tags:
-      - Users
+        - Users
       parameters:
-      - name: id
-        in: path
-        description: id from user
-        required: true
-        schema:
-          type: integer
-          format: int32
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
+            format: int32
       responses:
         200:
           description: successful operation
@@ -75,29 +77,29 @@ paths:
       summary: Update an user
       description: Return information of userId
       tags:
-      - Users
+        - Users
       parameters:
-      - name: id
-        in: path
-        description: id from user
-        required: true
-        schema:
-          type: integer
-          format: int32
-      - name: description
-        in: path
-        description: new description for user
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: apiKey
-        in: path
-        description: apiKey of the user
-        required: true
-        schema:
-          type: string
-          format: string
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: description
+          in: path
+          description: new description for user
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: apiKey
+          in: path
+          description: apiKey of the user
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -111,7 +113,7 @@ paths:
       summary: All Contribution
       description: Returns all contributions that are contains content
       tags:
-      - Contributions
+        - Contributions
       responses:
         200:
           description: successful operation
@@ -121,41 +123,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
-                  
+
     post:
-      summary: New contribution
-      description: Lets create a contribution
-      tags: 
-      - Contributions
-      parameters: 
-      - name: title
-        in: path
-        description: Titol de la contribucio
+      summary: Add a new Contribution
+      tags:
+        - Contributions
+      requestBody:
+        description: Optional description in *Markdown*
         required: true
-        schema:
-          type: string
-          format: string
-      - name: url
-        in: path
-        description: url de la contribucio
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: text
-        in: path
-        description: text de la contribucio
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: apiKey
-        in: path
-        description: api de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributionNew'
+      parameters:
+        - name: apiKey
+          in: header
+          description: id from contribution
+          required: true
+          schema:
+            type: string
+            format: string
+
       responses:
         200:
           description: successful operation
@@ -171,7 +159,7 @@ paths:
       summary: All Ask Contributions
       description: Returns all contributions that are tipe ask
       tags:
-      - Contributions
+        - Contributions
       responses:
         200:
           description: successful operation
@@ -181,13 +169,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
-                  
+
   /contribucions/news:
     get:
       summary: All News Contributions
       description: Returns all contributions that are tipe new
       tags:
-      - Contributions
+        - Contributions
       responses:
         200:
           description: successful operation
@@ -197,21 +185,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
-                  
+
   /contribucions/{id}:
     get:
       summary: Show a Contribution
       description: Returns a contribution
       tags:
-      - Contributions
-      parameters: 
-      - name: id
-        in: path
-        description: id from contribution
-        required: true
-        schema:
-          type: integer
-          format: int32
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
       responses:
         200:
           description: successful operation
@@ -219,27 +207,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contribution'
-                
+
     delete:
       summary: Deletes a Contribution
       description: Deletes a contribution
       tags:
-      - Contributions
-      parameters: 
-      - name: id
-        in: path
-        description: id from contribution
-        required: true
-        schema:
-          type: integer
-          format: int32
-      - name: apiKey
-        in: path
-        description: api de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: path
+          description: api de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -251,30 +239,30 @@ paths:
     post:
       summary: Create a new comment
       description: Create new comment
-      tags: 
-      - Contributions
-      parameters: 
-      - name: id
-        in: path
-        description: id from contribution
-        required: true
-        schema:
-          type: integer
-          format: int32
-      - name: content
-        in: path
-        description: content of comment
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: apiKey
-        in: path
-        description: api de l'usuari
-        required: true
-        schema:
-          type: string
-          format: string
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: content
+          in: path
+          description: content of comment
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: apiKey
+          in: path
+          description: api de l'usuari
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -282,29 +270,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-  
+
   /comentaris/{id}:
-    
+
     get:
       summary: Show a comment
       description: Shows a comment
-      tags: 
-      - Comments
-      parameters: 
-      - name: id
-        in: path
-        description: ID from comment
-        required: true
-        schema:
-          title: integer
-          format: int32
-      - name: content
-        in: path
-        description: content of comment
-        required: true
-        schema:
-          type: string
-          format: string
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: ID from comment
+          required: true
+          schema:
+            title: integer
+            format: int32
+        - name: content
+          in: path
+          description: content of comment
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -312,34 +300,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-    
+
     post:
       summary: Create a comment
       description: Shows a comment
-      tags: 
-      - Comments
-      parameters: 
-      - name: id
-        in: path
-        description: ID from comment
-        required: true
-        schema:
-          title: integer
-          format: int32
-      - name: content
-        in: path
-        description: content of comment
-        required: true
-        schema:
-          type: string
-          format: string
-      - name: apiKey
-        in: path
-        description: api from user
-        required: true
-        schema:
-          type: string
-          format: string
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: ID from comment
+          required: true
+          schema:
+            title: integer
+            format: int32
+        - name: content
+          in: path
+          description: content of comment
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: apiKey
+          in: path
+          description: api from user
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -353,15 +341,15 @@ paths:
       summary: All Comments from contribution
       description: Returns all coments from contribution id
       tags:
-      - Contributions
-      parameters: 
-      - name: id
-        in: path
-        description: id from user
-        required: true
-        schema:
-          type: integer
-          format: int32
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
+            format: int32
       responses:
         200:
           description: successful operation
@@ -371,28 +359,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
-  
+
   /contribucions/{id}/vote:
     put:
       summary: Vote a contribution
       description: Increments number of votes from a contribution
       tags:
-      - Contributions
+        - Contributions
       parameters:
-      - name: id
-        in: path
-        description: id from user
-        required: true
-        schema:
-          type: integer
-          format: int32
-      - name: apiKey
-        in: query
-        description: apiKey of the user, showd correspond with the id
-        required: true
-        schema:
-          type: string
-          format: string
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: query
+          description: apiKey of the user, showd correspond with the id
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -406,22 +394,22 @@ paths:
       summary: Vote a contribution
       description: Increments number of votes from a contribution
       tags:
-      - Contributions
+        - Contributions
       parameters:
-      - name: id
-        in: path
-        description: id from user
-        required: true
-        schema:
-          type: integer
-          format: int32
-      - name: apiKey
-        in: query
-        description: apiKey of the user, showd correspond with the id
-        required: true
-        schema:
-          type: string
-          format: string
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: query
+          description: apiKey of the user, showd correspond with the id
+          required: true
+          schema:
+            type: string
+            format: string
       responses:
         200:
           description: successful operation
@@ -433,16 +421,16 @@ paths:
     get:
       summary: Get all comments from user
       description: Get all comments from user id
-      tags: 
-      - Users
-      parameters: 
-      - name: id
-        in: path
-        description: id from user
-        schema:
-          type: integer
-          format: int32
-        required: true
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
       responses:
         200:
           description: successful operation
@@ -452,21 +440,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
-                  
+
   /contribucions/user/{id}:
     get:
       summary: Get all contributions from user
       description: Get all comments from user id
-      tags: 
-      - Users
-      parameters: 
-      - name: id
-        in: path
-        description: id from user
-        schema:
-          type: integer
-          format: int32
-        required: true
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
       responses:
         200:
           description: successful operation
@@ -492,7 +480,7 @@ components:
         apiKey:
           type: string
           description: secret apiKey of the user
-    
+
     Comment:
       type: object
       properties:
@@ -518,7 +506,7 @@ components:
         points:
           type: number
           description: Number of points the comment has
-          
+
     User:
       type: object
       properties:
@@ -538,7 +526,7 @@ components:
         timestamp:
           type: string
           description: Datetime when the user was created
-    
+
     Contribution:
       type: object
       properties:
@@ -569,3 +557,16 @@ components:
           type: number
           format: int32
           description: Number of points
+
+    ContributionNew:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the submission
+        url:
+          type: string
+          description: adress to the new
+        text:
+          type: string
+          description: Message
