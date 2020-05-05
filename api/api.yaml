@@ -4,7 +4,7 @@ info:
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: 'http://52.87.155.191:8080'
+  - url: 'http://52.207.235.212:8080'
 paths:
 
   /users:
@@ -49,6 +49,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserWithoutDetails'
+                
   /users/{id}:
     get:
       summary: Show an User
@@ -91,8 +92,8 @@ paths:
           type: string
           format: string
       - name: apiKey
-        in: query
-        description: apiKey of the user, showd correspond with the id
+        in: path
+        description: apiKey of the user
         required: true
         schema:
           type: string
@@ -104,8 +105,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    
-      
 
   /contribucions:
     get:
@@ -122,8 +121,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
+                  
     post:
-      summary: New post
+      summary: New contribution
+      description: Lets create a contribution
       tags: 
       - Contributions
       parameters: 
@@ -164,7 +165,7 @@ paths:
                 $ref: '#/components/schemas/Contribution'
         404:
           description: Method not found
-      
+
   /contribucions/ask:
     get:
       summary: All Ask Contributions
@@ -198,7 +199,6 @@ paths:
                   $ref: '#/components/schemas/Contribution'
                   
   /contribucions/{id}:
-    
     get:
       summary: Show a Contribution
       description: Returns a contribution
@@ -219,6 +219,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contribution'
+                
     delete:
       summary: Deletes a Contribution
       description: Deletes a contribution
@@ -246,9 +247,236 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contribution'
-      
+
+    post:
+      summary: Create a new comment
+      description: Create new comment
+      tags: 
+      - Contributions
+      parameters: 
+      - name: id
+        in: path
+        description: id from contribution
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: content
+        in: path
+        description: content of comment
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: apiKey
+        in: path
+        description: api de l'usuari
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
   
+  /comentaris/{id}:
+    
+    get:
+      summary: Show a comment
+      description: Shows a comment
+      tags: 
+      - Comments
+      parameters: 
+      - name: id
+        in: path
+        description: ID from comment
+        required: true
+        schema:
+          title: integer
+          format: int32
+      - name: content
+        in: path
+        description: content of comment
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+    
+    post:
+      summary: Create a comment
+      description: Shows a comment
+      tags: 
+      - Comments
+      parameters: 
+      - name: id
+        in: path
+        description: ID from comment
+        required: true
+        schema:
+          title: integer
+          format: int32
+      - name: content
+        in: path
+        description: content of comment
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: apiKey
+        in: path
+        description: api from user
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+
+  /contribucions/{id}/comentaris:
+    get:
+      summary: All Comments from contribution
+      description: Returns all coments from contribution id
+      tags:
+      - Contributions
+      parameters: 
+      - name: id
+        in: path
+        description: id from user
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
   
+  /contribucions/{id}/vote:
+    put:
+      summary: Vote a contribution
+      description: Increments number of votes from a contribution
+      tags:
+      - Contributions
+      parameters:
+      - name: id
+        in: path
+        description: id from user
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: apiKey
+        in: query
+        description: apiKey of the user, showd correspond with the id
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+
+  /contribucions/{id}/downvote:
+    put:
+      summary: Vote a contribution
+      description: Increments number of votes from a contribution
+      tags:
+      - Contributions
+      parameters:
+      - name: id
+        in: path
+        description: id from user
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: apiKey
+        in: query
+        description: apiKey of the user, showd correspond with the id
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+  /comentaris/user/{id}:
+    get:
+      summary: Get all comments from user
+      description: Get all comments from user id
+      tags: 
+      - Users
+      parameters: 
+      - name: id
+        in: path
+        description: id from user
+        schema:
+          type: integer
+          format: int32
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+                  
+  /contribucions/user/{id}:
+    get:
+      summary: Get all contributions from user
+      description: Get all comments from user id
+      tags: 
+      - Users
+      parameters: 
+      - name: id
+        in: path
+        description: id from user
+        schema:
+          type: integer
+          format: int32
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+
 components:
   schemas:
     UserWithoutDetails:
@@ -264,6 +492,33 @@ components:
         apiKey:
           type: string
           description: secret apiKey of the user
+    
+    Comment:
+      type: object
+      properties:
+        text:
+          type: string
+          format: string
+          description: content of the comment
+        contribution_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
+        comentari_id:
+          type: number
+          format: int32
+          description: Unique identifier for the comment
+        user_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
+        timestamp:
+          type: string
+          description: Datetime when the comment was created
+        points:
+          type: number
+          description: Number of points the comment has
+          
     User:
       type: object
       properties:
@@ -291,34 +546,26 @@ components:
           type: number
           format: int32
           description: Unique identifier for the submission
+        user_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
         title:
           type: string
           description: Name of the submission
         url:
           type: string
           description: adress to the new
-        content:
+        text:
           type: string
           description: Message
-        tipo:
-          type: string
-          description: Type of submission
-        ncomments:
-          type: number
-          format: int32
-          description: Number of comments in the submission
-        nvotes:
-          type: number
-          format: int32
-          description: Number of votes
-        author_id:
-          type: number
-          format: int32
-          description: Identifier of the user owner
-        timestamp:
+        created_at:
           type: string
           description: Datetime when the submission was created
-        comments:
-          type: array
-          items:
-            type: number
+        updated_at:
+          type: string
+          description: Datetime when the submission was created
+        points:
+          type: number
+          format: int32
+          description: Number of points
