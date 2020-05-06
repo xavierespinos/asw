@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get '/api/contribucions/news' =>'api/contribucions#news'# get de tots els news FET
     delete '/api/contribucions/:id' =>'api/contribucions#destroy' # delete contribucion FET
 
-    #get '/api/contribucions?id' =>'api/contribucions#show' # get d'una contribucio FET -> ejemplo :localhost:3000/api/contribucions?id=6
+    get '/api/contribucions/:id' =>'api/contribucions#show' # get d'una contribucio FET
     get '/api/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio FET
     post '/api/contribucions' =>'api/contribucions#new' # post d'una contribucio FET
     post '/api/contribucions/:id' =>'api/comentaris#new' # post d'un comentari
@@ -17,17 +17,13 @@ Rails.application.routes.draw do
     get '/api/users/:id' => 'api/users#show' # get info usuari
     put '/api/users/:id' => 'api/users#update' # update info usuari
 
-    get '/api/comentaris/:id' =>'api/comentaris#show' # get comentari
-    post '/api/comentaris/:id' =>'api/replies#new' # post d'una replica
+    get '/api/comentaris/:id' =>'api/comentaris#show' # get comentari Fet
+    post '/api/comentaris/:id' =>'api/comentaris#replies' # post d'una replica Fet
+    get '/api/comentaris/user/:id' =>'api/comentaris#fromuser' # get comentaris d'un usuari Fet
+
     post '/api/comentaris/:id/vote' =>'api/comentaris#upvote' # post d'un vote
     delete '/api/comentaris/:id/vote' =>'api/comentaris#downvote' # delete d'un vote
 
-    get '/api/replies/:id' => 'api/replies#show' # get d'una replica
-    post '/api/replies/:id/vote' =>'api/replies#upvote' # post d'un vote
-    delete '/api/replies/:id/vote' =>'api/replies#downvote' # delete d'un vote
-
-
-    get '/api/comentaris/user/:id' =>'api/comentaris#fromuser' # get comentaris d'un usuari Fet
     get '/api/contribucions/user/:id' =>'api/contribucions#fromUser' # get de totes les contribucions de l'usuari FET
     get '/api/comentaris/upvoted/user/:id' =>'api/comentaris#upvotedfdromuser' # get comentaris votats d'un usuari
     get '/api/contribucions/upvoted/user/:id' =>'api/contribucions#upvotedfdromuser' # get de totes les contribucions votades per l'usuari

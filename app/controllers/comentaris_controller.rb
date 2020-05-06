@@ -44,8 +44,7 @@ class ComentarisController < ApplicationController
     user = User.find(idUser)
     @tipo = "#{user.email} threads"
     @comentari = Comentari.new
-    @comentaris = []
-    @comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
+    @comentaris = getThreads(idUser)
   end
 
 
@@ -96,5 +95,10 @@ class ComentarisController < ApplicationController
     @comentari.comentari_id = comentari_id 
   end
 
+  def getThreads(idUser)
+    comentaris = []
+    comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
+    return comentaris
+  end
   
 end

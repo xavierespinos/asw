@@ -73,7 +73,7 @@ class Api::ContribucionsController < Api::BaseController
         render json: {error: 'Bad request'} , status: :bad_request
       end
     else
-      render json: {error: 'need login'}, status: :unauthorized
+      render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
   #--------------------------------------------------------------------------------------------------------------#
@@ -130,7 +130,6 @@ class Api::ContribucionsController < Api::BaseController
     end
   end
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_controllers
     @contribucionsController = ContribucionsController.new
     @usersController = UsersController.new

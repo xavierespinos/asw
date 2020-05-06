@@ -1,27 +1,100 @@
-class Api::Comentaris < Api::BaseController
-  
-  def show
-    
-  end
-  
+class Api::ComentarisController < Api::BaseController
+  before_action :set_controllers
+
+
   def new
-    
+    if @usersController.isValidApiToken(getApiKey)
+      if !params[:id].nil?
+        comentari = Comentari.new(comentari_params)
+        comentari.contribucion_id = params[:id]
+        if Contribucion.exists?( comentari.contribucion_id)
+          comentari.user_id = @usersController.getUserByApiToken(getApiKey).id
+          if comentari.save
+            render json: comentari, status: :ok
+          else
+            render json: comentari, status: :bad_request
+          end
+        else
+          render json: {error: 'not exist contribution to add reply'}, status: :bad_request
+        end
+      else
+        render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
+      end
+    else
+      render json: {error: 'id contribution is required'}, status: :bad_request
+    end
   end
-  
-  def upvote
-    
+
+  def show
+    idComentari = params[:id]
+    if !idComentari.nil?
+      comentari = Comentari.find(idComentari)
+      result(comentari)
+    end
   end
-  
-  def downvote
-    
+
+  def replies
+    if @usersController.isValidApiToken(getApiKey)
+      if !params[:id].nil?
+          comentari = Comentari.new(comentari_params)
+          comentari.comentari_id = params[:id]
+          comentariBD = Comentari.find(comentari.comentari_id)
+          if !comentariBD.nil?
+            comentari.user_id = @usersController.getUserByApiToken(getApiKey).id
+            comentari.contribucion_id = comentariBD.contribucion_id
+            if comentari.save
+              render json: comentari, status: :ok
+            else
+              render json: comentari, status: :bad_request
+            end
+          else
+            render json: {error: 'not exist comment to add reply'}, status: :bad_request
+          end
+        else
+          render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
+        end
+      else
+        render json: {error: 'id comment is required'}, status: :bad_request
+      end
+
   end
-  
+
   def fromuser
-    
+    if !params[:id].nil?
+      idUser = params[:id]
+      comentaris = @contribucionsController.getThreads(idUser)
+      result(comentaris)
+    else
+      render json: "id user required", status: :bad_request
+    end
   end
-  
-  def upvotedfdromuser
-    
+
+  def comentari_params
+    params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
-  
+
+  def set_controllers
+    @contribucionsController = ComentarisController.new
+    @usersController = UsersController.new
+  end
+
+  def result(element)
+    if element.nil?
+      render json: {error: 'No content'}, status: :no_content
+    else
+      render json: element, status: :ok
+    end
+  end
+
+  def getApiKey()
+    result = ""
+    begin
+      if request.headers["apiKey"] != ""
+        result =  request.headers["apiKey"]
+      end
+    rescue
+    end
+    return result
+  end
+
 end
