@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     delete '/api/contribucions/:id/vote' =>'api/contribucions#downvote' # delete d'un vote
 
     get '/api/users/:id' => 'api/users#show' # get info usuari
-    put '/api/users/:id' => 'api/users#update' # update info usuari
+    put '/api/users' => 'api/users#update' # update info usuari
 
     get '/api/comentaris/:id' =>'api/comentaris#show' # get comentari
     post '/api/comentaris/:id' =>'api/replies#new' # post d'una replica

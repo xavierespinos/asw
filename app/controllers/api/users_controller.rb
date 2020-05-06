@@ -1,4 +1,4 @@
-class Api::Users < Api::BaseController
+class Api::UsersController < Api::BaseController
   before_action :set_controllers
   before_action :set_user
   
@@ -9,13 +9,25 @@ class Api::Users < Api::BaseController
     result(@usersController.getUserById(idUser))
   end
   
-  # PATCH/PUT /users/1
+  # PATCH/PUT /users
   # PATCH/PUT /users/1.json
   def update
-    if @user.update(user_params_edit)
-      format.json { render status: :ok, json: @user }
+    if @usersController.isValidApiToken(getApiKey)
+      user = @userController.getUserByApiToken(getApiKey())
+      userparam = User.new(user_params_edit)
+      
+      ##validar por contrasenya
+      if user.password == userparam.password
+        if user.update(user_params_edit)
+           render json: user , status: :ok
+        else
+           render json: @user.errors, status: :unprocessable_entity 
+        end
+      else
+          render json: {error: 'wrong password'}, status: :unauthorized
+      end
     else
-      format.json { render json: @user.errors, status: :unprocessable_entity }
+         render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
   
@@ -43,7 +55,7 @@ class Api::Users < Api::BaseController
   private
   
     def user_params_edit
-      params.permit(:name, :email, :password, :password_confirmation, :about)
+      params.require(:user).permit(:name, :password, :description)
     end
     
     def set_controllers
