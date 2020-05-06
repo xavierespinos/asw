@@ -10,36 +10,22 @@ servers:
 paths:
 
   /users:
-    post:
-      summary: Create new user
-      description: Crete new user
+    put:
+      summary: Update an user
+      description: Return information of userId
       tags:
         - Users
+      requestBody:
+        description: Optional description in Markdown
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdated'
       parameters:
-        - name: name
-          in: path
-          description: Nom de l'usuari
-          required: true
-          schema:
-            type: string
-            format: string
-        - name: email
-          in: path
-          description: Mail de l'usuari
-          required: true
-          schema:
-            type: string
-            format: string
-        - name: password
-          in: path
-          description: Password de l'usuari
-          required: true
-          schema:
-            type: string
-            format: string
-        - name: password_confirmation
-          in: path
-          description: Verificacio de l'usuari
+        - name: apiKey
+          in: header
+          description: id from user
           required: true
           schema:
             type: string
@@ -50,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithoutDetails'
+                $ref: '#/components/schemas/User'
 
   /users/{id}:
     get:
@@ -66,40 +52,6 @@ paths:
           schema:
             type: integer
             format: int32
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-    put:
-      summary: Update an user
-      description: Return information of userId
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          description: id from user
-          required: true
-          schema:
-            type: integer
-            format: int32
-        - name: description
-          in: path
-          description: new description for user
-          required: true
-          schema:
-            type: string
-            format: string
-        - name: apiKey
-          in: path
-          description: apiKey of the user
-          required: true
-          schema:
-            type: string
-            format: string
       responses:
         200:
           description: successful operation
@@ -153,7 +105,7 @@ paths:
         404:
           description: Method not found
 
-  /contribucions/ask:
+  /contribucions/asks:
     get:
       summary: All Ask Contributions
       description: Returns all contributions that are tipe ask
@@ -169,9 +121,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Contribution'
 
-  /contribucions/news:
+  /contribucions/urls:
     get:
-      summary: All News Contributions
+      summary: All urls Contributions
       description: Returns all contributions that are tipe new
       tags:
         - Contributions
@@ -328,7 +280,7 @@ paths:
       summary: All Comments from contribution
       description: Returns all coments from contribution id
       tags:
-        - Contributions
+        - Comments
       parameters:
         - name: id
           in: path
@@ -572,3 +524,12 @@ components:
           type: string
           description: text comment
 
+    UserUpdated:
+      type: object
+      properties:
+        name:
+          type: string
+          description: email of the user
+        description:
+          type: string
+          description:  of the user

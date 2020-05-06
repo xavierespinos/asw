@@ -2,24 +2,25 @@ Rails.application.routes.draw do
 
   scope "/",defaults: {format: 'json'} do
 
-    get '/api/contribucions' =>'api/contribucions#all' # get de totes les contribucions FET
+    get '/api/contribucions' =>'api/contribucions#news' # get de totes les contribucions FET
     get '/api/contribucions/asks' =>'api/contribucions#asks' # get de tots els asks FET
-    get '/api/contribucions/news' =>'api/contribucions#news'# get de tots els news FET
+    get '/api/contribucions/urls' =>'api/contribucions#urls'# get de tots els news FET
     delete '/api/contribucions/:id' =>'api/contribucions#destroy' # delete contribucion FET
 
     get '/api/contribucions/:id' =>'api/contribucions#show' # get d'una contribucio FET
     get '/api/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio FET
     post '/api/contribucions' =>'api/contribucions#new' # post d'una contribucio FET
-    post '/api/contribucions/:id' =>'api/comentaris#new' # post d'un comentari
-    post '/api/contribucions/:id/vote' =>'api/contribucions#upvote' # post d'un vote FET
+    post '/api/contribucions/:id' =>'api/comentaris#new' # post d'un comentari FET
+    post '/api/contribucions/:id/vote' =>'api/contribucions#upvote' # post d'un vote
     delete '/api/contribucions/:id/vote' =>'api/contribucions#downvote' # delete d'un vote
 
-    get '/api/users/:id' => 'api/users#show' # get info usuari
-    put '/api/users' => 'api/users#update' # update info usuari
+    get '/api/users/:id' => 'api/users#show' # get info usuari FET
+    put '/api/users' => 'api/users#update' # update info usuari FET
 
     get '/api/comentaris/:id' =>'api/comentaris#show' # get comentari Fet
-    post '/api/comentaris/:id' =>'api/comentaris#replies' # post d'una replica Fet
     get '/api/comentaris/user/:id' =>'api/comentaris#fromuser' # get comentaris d'un usuari Fet
+    get '/api/comentaris/:id/replies' =>'api/comentaris#showReplies' # post d'una replica Fet
+    post '/api/comentaris/:id' =>'api/comentaris#replies' # post d'una replica Fet
 
     post '/api/comentaris/:id/vote' =>'api/comentaris#upvote' # post d'un vote
     delete '/api/comentaris/:id/vote' =>'api/comentaris#downvote' # delete d'un vote

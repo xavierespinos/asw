@@ -33,6 +33,28 @@ class Api::ComentarisController < Api::BaseController
     end
   end
 
+  def showReplies
+    idComentari = params[:id]
+    if !idComentari.nil?
+      comentaris = Comentari.where(comentari_id: idComentari)
+      comentaris += getReplies(comentaris)
+      result(comentaris)
+    end
+  end
+
+  def getReplies(comentaris)
+    comentaris2 = []
+    comentaris.each do |c|
+      comentaris2 += Comentari.where(comentari_id: c.id)
+    end
+
+    if comentaris2.count > 0
+      comentaris2 += getReplies(comentaris2)
+    end
+
+    return comentaris2
+  end
+
   def replies
     if @usersController.isValidApiToken(getApiKey)
       if !params[:id].nil?
@@ -83,6 +105,14 @@ class Api::ComentarisController < Api::BaseController
       render json: {error: 'No content'}, status: :no_content
     else
       render json: element, status: :ok
+    end
+  end
+
+  def resultListFind(list)
+    if list.count > 0
+      render json: list, status: :ok
+    else
+      render json: {error: 'No content'}, status: :no_content
     end
   end
 

@@ -4,14 +4,14 @@ class Api::ContribucionsController < Api::BaseController
   #---------------------------------------------- Probado ----------------------------------------------#
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
-  def all
+  def urls
     if params[:id].nil?
-      resultListFind(@contribucionsController.getAllContribucio)
+      resultListFind(@contribucionsController.getAllContribucioUrl)
     else
       show
     end
   end
-  
+
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def asks
@@ -21,7 +21,7 @@ class Api::ContribucionsController < Api::BaseController
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def news
-    resultListFind(@contribucionsController.getAllContribucioUrl)
+    resultListFind(@contribucionsController.getAllContribucio)
   end
   
   # GET /api/contribucions/1
