@@ -41,7 +41,7 @@
                     
                     <p>
                       <strong>Upvoted contributions:</strong>
-                      <%= link_to 'upvoted contributions',contribucions_submitted_path(:user_id => @user.id),method: "get"  %>
+                      <%= link_to 'upvoted contributions',contribucions_liked_path(:id => @user.id),method: "get"  %>
                     </p>
                     
                     <p>
