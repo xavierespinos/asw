@@ -146,7 +146,7 @@ class ComentarisController < ApplicationController
   
   def addComentarisVoted(idUser,idComentari)
     if !ComentarisVoted.exists?(user: idUser,comentari: idComentari)
-      return  ComentarisVoted.create(user: idUser,comentari: idComentari)
+      return  ComentarisVoted.create(user: idUser, comentari: idComentari)
     end
     return nil
   end
