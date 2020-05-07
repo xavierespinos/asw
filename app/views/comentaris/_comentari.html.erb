@@ -1,6 +1,7 @@
 
 <li style="list-style:none;">
-   <a id="up_22681207" <%= link_to '▲', upvote_comentari_path(:id => c.id, :lloc => "main"), method: :put %>
+   <a id="up_22681207" <%= link_to '▲', upvote_comentari_path(:id => c.id, :lloc => "main", :desvote => "0"), method: :put %>
+   <a id="up_22681207" <%= link_to '▼', upvote_comentari_path(:id => c.id, :lloc => "main", :desvote => "1"), method: :put %>
    <a style="color: #828282;" href="/users/<%=c.user_id%>"> <%= c.user.email %> </a>
    <span class="age">
      <a><%= time_ago_in_words(c.created_at) %></a>
