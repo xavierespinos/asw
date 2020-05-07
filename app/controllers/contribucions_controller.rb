@@ -133,11 +133,7 @@ class ContribucionsController < ApplicationController
     if !current_user().nil?
       respond_to do |format|
         if updateVote
-<<<<<<< HEAD
-          addUpVotedContribution(@contribucion)
-=======
-          addUpVotedContribution(@contribucion.id,@contribucion.points)
->>>>>>> 34e3e4487d758a30d9c89ca1b95c0c32097a69a7
+          @contribucion.update_attribute(:points, @contribucion.points)
         end
         if params[:lloc] == "main"
           format.html { redirect_to contribucions_url}
@@ -167,10 +163,14 @@ class ContribucionsController < ApplicationController
     return false
   end
 
-  def addUpVotedContribution(idContribucion,points)
+  def addUpVotedContribution(idContribucion,add)
     c= Contribucion.find(idContribucion)
-    c.points = points
-    return c.update_attribute(:points, points)
+    if add
+      c.points += 1
+    else
+      c.points -= 1
+    end
+    return c.update_attribute(:points, c.points)
   end
 
 

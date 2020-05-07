@@ -84,7 +84,7 @@ class ComentarisController < ApplicationController
       if !current_user().nil?
         respond_to do |format|
           if updateVote
-            addUpVotedComentaris(@comentari)
+            addUpVotedComentaris(@comentari.id, @comentari.points)
           end
           @comentari.update_attribute(:points, @points) 
           if params[:lloc] == "main"
@@ -140,8 +140,10 @@ class ComentarisController < ApplicationController
     return false
   end
   
-  def addUpVotedComentaris(comentari)
-    return cocomentari.update_attribute(:points, comentari.points)
+  def addUpVotedComentaris(idComentari, points)
+    c= Comentari.find(idComentari)
+    c.points = points
+    return c.update_attribute(:points, points)
   end 
   
   def addComentarisVoted(idUser,idComentari)
@@ -151,8 +153,8 @@ class ComentarisController < ApplicationController
     return nil
   end
 
-  def deleteComentariVoted(idUser,idComentari)
-    if ComentarisVoted.exists?(user: idUser,contribucion: idContribucio)
+  def deleteComentarisVoted(idUser,idComentari)
+    if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
       comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
       return comentarisVoted[0].destroy
     end
