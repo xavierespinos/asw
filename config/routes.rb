@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     get '/api/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio FET
     post '/api/contribucions' =>'api/contribucions#new' # post d'una contribucio FET
     post '/api/contribucions/:id' =>'api/comentaris#new' # post d'un comentari FET
-    put '/api/contribucions/:id/vote' =>'api/contribucions#upvote' # post d'un vote FET
+    put '/api/contribucions/:id/vote' =>'api/contribucions#upvote' # put d'un vote FET
+    put '/api/contribucions/:id/downvote' =>'api/contribucions#downvote' # put d'un downvote FET
 
     get '/api/users/:id' => 'api/users#show' # get info usuari FET
     put '/api/users' => 'api/users#update' # update info usuari FET
@@ -21,7 +22,8 @@ Rails.application.routes.draw do
     
     get '/api/comentaris/:id/replies' =>'api/comentaris#showReplies' # get de les repliques d'un comentari FET
     post '/api/comentaris/:id' =>'api/comentaris#replies' # post d'una replica FET
-    put '/api/comentaris/:id/vote' =>'api/comentaris#upvote' # post d'un vote  FET NO PROVAT
+    put '/api/comentaris/:id/vote' =>'api/comentaris#upvote' # put d'un vote  FET
+    put '/api/contribucions/:id/downvote' =>'api/comentaris#downvote' # put d'un downvote FET
 
     get '/api/contribucions/user/:id' =>'api/contribucions#fromUser' # get de totes les contribucions de l'usuari FET
     get '/api/comentaris/upvoted/user/:id' =>'api/comentaris#upvotedfdromuser' # get comentaris votats d'un usuari

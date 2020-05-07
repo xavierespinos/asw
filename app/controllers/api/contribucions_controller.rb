@@ -82,11 +82,7 @@ class Api::ContribucionsController < Api::BaseController
   def upvote
     if @usersController.isValidApiToken(getApiKey)
       @contribucion = Contribucion.find(params[:id])
-      if params[:desvotar] == "0"
-        @points = @contribucion.points + 1
-      else
-        @points = @contribucion.points - 1
-      end
+      points = @contribucion.points + 1
       @contribucion.update_attribute(:points, points) 
       respond_to do |format|
         format.json{ render json: @contribucion, status: :ok }
@@ -97,6 +93,23 @@ class Api::ContribucionsController < Api::BaseController
       end
     end
   end
+  
+  
+  def downvote
+    if @usersController.isValidApiToken(getApiKey)
+      @contribucion = Contribucion.find(params[:id])
+      points = @contribucion.points - 1
+      @contribucion.update_attribute(:points, points) 
+      respond_to do |format|
+        format.json{ render json: @contribucion, status: :ok }
+      end
+    else 
+      respond_to do |format|
+        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
+      end
+    end
+  end
+
 
   def upvotedfromUser
     
