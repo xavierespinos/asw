@@ -80,40 +80,50 @@ class Api::ContribucionsController < Api::BaseController
   
   def upvote
     if @usersController.isValidApiToken(getApiKey)
-      @contribucion = Contribucion.find(params[:id])
-      points = @contribucion.points + 1
-      @contribucion.update_attribute(:points, points) 
-      respond_to do |format|
-        format.json{ render json: @contribucion, status: :ok }
+      if !params[:id].nil?
+        u = @usersController.getUserByApiToken(getApiKey)
+        if !@contribucionsController.addContribucionsVoted(u.id,params[:id]).nil?
+          @contribucionsController.addUpVotedContribution(params[:id],true)
+          c = Contribucion.find(params[:id])
+          result(c)
+        else
+          render json: {error: "Contribution already voted"}, status: :bad_request
+        end
+      else
+         render json: {error: "Need id contribution"}, status: :bad_request
       end
-    else 
-      respond_to do |format|
-        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
-      end
+    else
+      render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
-  
-  
+
+
   def downvote
     if @usersController.isValidApiToken(getApiKey)
-      @contribucion = Contribucion.find(params[:id])
-      points = @contribucion.points - 1
-      @contribucion.update_attribute(:points, points) 
-      respond_to do |format|
-        format.json{ render json: @contribucion, status: :ok }
+      if !params[:id].nil?
+        u = @usersController.getUserByApiToken(getApiKey)
+        if @contribucionsController.deleteContribucionsVoted(u.id,params[:id])
+          @contribucionsController.addUpVotedContribution(params[:id],false)
+          c = Contribucion.find(params[:id])
+          result(c)
+        else
+          render json: {error: "Contribution not voted"}, status: :not_found
+        end
+      else
+        render json: {error: "Need id contribution"}, status: :bad_request
       end
-    else 
-      respond_to do |format|
-        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
-      end
+    else
+      render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
 
-
-  def upvotedfromUser
-    resultListFind(@contributionscontroller.getContribucionsLiked(params[:id]))
+  def upvotedfromuser
+    if !params[:id].nil?
+      resultListFind(@contribucionsController.getContribucionsLiked(params[:id]))
+    else
+      render json: {error: "Need id user"}, status: :bad_request
+    end
   end
-
 
   private
 

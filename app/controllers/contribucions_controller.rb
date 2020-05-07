@@ -118,22 +118,21 @@ class ContribucionsController < ApplicationController
   
   #PUT /contribucions/1/upvote
   def upvote
-    if params[:desvotar] == "0"
-      updateVote = false
-      if !addContribucionsVoted(current_user().id,@contribucion.id).nil?
-        @contribucion.points += 1
-        updateVote = true
+      if params[:desvotar] == "0"
+        updateVote = false
+        if !addContribucionsVoted(current_user().id,@contribucion.id).nil?
+          @contribucion.points += 1
+          updateVote = true
+        end
+      else
+        if deleteContribucionsVoted(current_user().id,@contribucion.id)
+          @contribucion.points -= 1
+          updateVote = true
+        end
       end
-    else
-      if deleteContribucionsVoted(current_user().id,@contribucion.id)
-        @contribucion.points -= 1
-        updateVote = true
-      end
-    end
-    if !current_user().nil?
       respond_to do |format|
         if updateVote
-          addUpVotedContribution(@contribucion.id,@contribucion.points)
+          @contribucion.update_attribute(:points, @contribucion.points)
         end
         if params[:lloc] == "main"
           format.html { redirect_to contribucions_url}
@@ -143,30 +142,31 @@ class ContribucionsController < ApplicationController
           format.json { head :no_content }
         end
       end
-    else
-      redirect_to '/login'
-    end
   end
 
   def addContribucionsVoted(idUser,idContribucio)
     if !ContribucionsVoted.exists?(user: idUser,contribucion: idContribucio)
-      return  ContribucionsVoted.create(user: idUser,contribucion: idContribucio)
+      return ContribucionsVoted.create(user: idUser,contribucion: idContribucio)
     end
     return nil
   end
 
   def deleteContribucionsVoted(idUser,idContribucio)
     if ContribucionsVoted.exists?(user: idUser,contribucion: idContribucio)
-      contribucionsVoted = ContribucionsVoted.where(user: current_user().id, contribucion: @contribucion.id).limit(1)
+      contribucionsVoted = ContribucionsVoted.where(user: idUser, contribucion: idContribucio).limit(1)
       return contribucionsVoted[0].destroy
     end
     return false
   end
 
-  def addUpVotedContribution(idContribucion,points)
+  def addUpVotedContribution(idContribucion,add)
     c= Contribucion.find(idContribucion)
-    c.points = points
-    return c.update_attribute(:points, points)
+    if add
+      c.points += 1
+    else
+      c.points -= 1
+    end
+    return c.update_attribute(:points, c.points)
   end
 
 

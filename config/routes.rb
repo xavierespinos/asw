@@ -23,11 +23,11 @@ Rails.application.routes.draw do
     get '/api/comentaris/:id/replies' =>'api/comentaris#showReplies' # get de les repliques d'un comentari FET
     post '/api/comentaris/:id' =>'api/comentaris#replies' # post d'una replica FET
     put '/api/comentaris/:id/vote' =>'api/comentaris#upvote' # put d'un vote  FET
-    put '/api/contribucions/:id/downvote' =>'api/comentaris#downvote' # put d'un downvote FET
+    put '/api/comentaris/:id/downvote' =>'api/comentaris#downvote' # put d'un downvote FET
 
     get '/api/contribucions/user/:id' =>'api/contribucions#fromUser' # get de totes les contribucions de l'usuari FET
-    get '/api/comentaris/upvoted/user/:id' =>'api/comentaris#upvotedfdromuser' # get comentaris votats d'un usuari
-    get '/api/contribucions/upvoted/user/:id' =>'api/contribucions#upvotedfdromuser' # get de totes les contribucions votades per l'usuari FET
+    get '/api/comentaris/upvoted/user/:id' =>'api/comentaris#upvotedfromuser' # get comentaris votats d'un usuari
+    get '/api/contribucions/upvoted/user/:id' =>'api/contribucions#upvotedfromuser' # get de totes les contribucions votades per l'usuari FET
 
   end
   

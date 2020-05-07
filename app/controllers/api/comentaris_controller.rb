@@ -34,7 +34,6 @@ class Api::ComentarisController < Api::BaseController
     end
   end
 
-
   def showReplies
     idComentari = params[:id]
     if !idComentari.nil?
@@ -94,41 +93,53 @@ class Api::ComentarisController < Api::BaseController
       render json: "id user required", status: :bad_request
     end
   end
-  
-  
+
+
   def upvote
     if @usersController.isValidApiToken(getApiKey)
-      @comentari = Comentari.find(params[:id])
-      points = @comentari.points + 1
-      @comentari.update_attribute(:points, points) 
-      respond_to do |format|
-        format.json{ render json: @comentari, status: :ok }
+      if !params[:id].nil?
+        u = @usersController.getUserByApiToken(getApiKey)
+        if !@comentarisController.addComentarisVoted(u.id,params[:id]).nil?
+          @comentarisController.addUpVotedComentari(params[:id],true)
+          c = Comentari.find(params[:id])
+          result(c)
+        else
+          render json: {error: "Comment already voted"}, status: :bad_request
+        end
+      else
+        render json: {error: "Need id comment"}, status: :bad_request
       end
-    else 
-      respond_to do |format|
-        format.json { render status: :method_not_allowed }
-      end
+    else
+      render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
-  
-  
+
+
   def downvote
     if @usersController.isValidApiToken(getApiKey)
-      @comentari = Comentari.find(params[:id])
-      points = @comentari.points - 1
-      @comentari.update_attribute(:points, points)
-      respond_to do |format|
-        format.json{ render json: @comentari, status: :ok }
+      if !params[:id].nil?
+        u = @usersController.getUserByApiToken(getApiKey)
+        if @comentarisController.deleteComentarisVoted(u.id,params[:id])
+          @comentarisController.addUpVotedComentari(params[:id],false)
+          c = Comentari.find(params[:id])
+          result(c)
+        else
+          render json: {error: "Comment not voted"}, status: :not_found
+        end
+      else
+        render json: {error: "Need id comment"}, status: :bad_request
       end
-    else 
-      respond_to do |format|
-        format.json { render status: :method_not_allowed }
-      end
+    else
+      render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
-  
+
   def upvotedfromuser
-    resultListFind(@comentariscontroller.nombre de la funcion(params[:id]))
+    if !params[:id].nil?
+      resultListFind(@comentarisController.getComentarisLiked(params[:id]))
+    else
+      render json: {error: "Need id user"}, status: :bad_request
+    end
   end
 
 

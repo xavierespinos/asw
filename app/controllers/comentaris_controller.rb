@@ -1,12 +1,12 @@
 class ComentarisController < ApplicationController
   before_action :authenticate_user!
-  
+
   def new
     comentari_id = 0
     @id_reply = params[:id_comentari]
     @id_contrib = params[:id_contribucio]
     if params[:comentari_id] != nil then
-      comentari_id = params[:comentari_id] 
+      comentari_id = params[:comentari_id]
     end
     initNew(params[:contribucion_id],comentari_id)
   end
@@ -22,10 +22,10 @@ class ComentarisController < ApplicationController
       else
         url = "/contribucions/#{@comentari.contribucion_id}"
         if @comentari.comentari_id != 0 then
-          url += "/comentaris/#{@comentari.comentari_id}"  
+          url += "/comentaris/#{@comentari.comentari_id}"
         end
-          format.html { redirect_to url } ## Specify the format in which you are rendering "new" page
-          format.json { render json: @reservation.errors } ## You might want to specify a json format as well
+        format.html { redirect_to url } ## Specify the format in which you are rendering "new" page
+        format.json { render json: @reservation.errors } ## You might want to specify a json format as well
       end
     end
   end
@@ -38,7 +38,7 @@ class ComentarisController < ApplicationController
 
   def destroy
   end
-  
+
   def threads
     idUser = params[:user_id]
     user = User.find(idUser)
@@ -64,38 +64,38 @@ class ComentarisController < ApplicationController
 
   def index
   end
-  
+
   #PUT /comentaris/1/upVote
   def upvote
     if !params[:id].nil?
       @comentari = Comentari.find(params[:id])
       if params[:desvote] == "0"
-        #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
-        if !ComentarisVoted.exists?(user: current_user().id, comentari: @comentari.id)
-          @points = @comentari.points + 1
-          ComentarisVoted.create(:user => current_user().id, :comentari => @comentari.id)
+        updateVote = false
+        if !addComentarisVoted(current_user().id,@comentari.id).nil?
+          @comentari.points += 1
+          updateVote = true
         end
       else
-        @points = @comentari.points - 1
-        deleteComentariVoted(current_user().id, @comentari.id)
+        if deleteComentarisVoted(current_user().id,@comentari.id)
+          @comentari.points -= 1
+          updateVote = true
+        end
       end
-      if !current_user().nil?
         respond_to do |format|
-          @comentari.update_attribute(:points, @points) 
+          if updateVote
+            @comentari.update_attribute(:points,@comentari.points)
+          end
           if params[:lloc] == "main"
             format.html { redirect_to contribucions_url}
-            format.json { head :no_content } 
-          else 
+            format.json { head :no_content }
+          else
             format.html { redirect_to @comentari}
             format.json { head :no_content }
           end
         end
-      else
-        redirect_to '/login'
-      end
     end
   end
-  
+
   def comentari_params
     params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
@@ -108,8 +108,8 @@ class ComentarisController < ApplicationController
     else
       @comentaris = Comentari.where(id: comentari_id )
     end
-    @comentari.contribucion_id = contribucion_id  
-    @comentari.comentari_id = comentari_id 
+    @comentari.contribucion_id = contribucion_id
+    @comentari.comentari_id = comentari_id
   end
 
   def getThreads(idUser)
@@ -117,7 +117,7 @@ class ComentarisController < ApplicationController
     comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
     return comentaris
   end
-  
+
   def getComentarisLiked(idUser)
     @comentaris = []
     @comentarisvoted = ComentarisVoted.where("user = ?", idUser)
@@ -126,14 +126,33 @@ class ComentarisController < ApplicationController
     end
     return @comentaris
   end
-  
-  def deleteComentariVoted(idUser,idComentari)
+
+  def deleteComentarisVoted(idUser,idComentari)
     if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
-      comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
+      comentarisVoted = ComentarisVoted.where(user: idUser, comentari: idComentari).limit(1)
       return comentarisVoted[0].destroy
     end
     return false
   end
-  
+
+  def addUpVotedComentari(idComentari,add)
+    c= Comentari.find(idComentari)
+    if add
+      c.points += 1
+    else
+      c.points -= 1
+    end
+    return c.update_attribute(:points, c.points)
+  end
+
+  def addComentarisVoted(idUser,idComentari)
+    if !ComentarisVoted.exists?(user: idUser,comentari: idComentari)
+      return  ComentarisVoted.create(user: idUser, comentari: idComentari)
+    end
+    return nil
+  end
+
+
+
 end
 
