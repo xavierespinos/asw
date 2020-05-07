@@ -70,17 +70,21 @@ class ComentarisController < ApplicationController
     if !params[:id].nil?
       @comentari = Comentari.find(params[:id])
       if params[:desvotar] == "0"
-        @points = @comentari.points + 1
+        #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
+        if !ComentarisVoted.exists?(user: current_user().id,contribucion: @comentari.id)
+          @points = @comentari.points + 1
+          ComentarisVoted.create(:user => current_user().id, :comentari => @comentari.id)
+        end
       else
         @points = @comentari.points - 1
       end
       if !current_user().nil?
         respond_to do |format|
-          @comentari.update_attribute(:points, @points)
+          @comentari.update_attribute(:points, @points) 
           if params[:lloc] == "main"
             format.html { redirect_to contribucions_url}
-            format.json { head :no_content }
-          else
+            format.json { head :no_content } 
+          else 
             format.html { redirect_to @comentari}
             format.json { head :no_content }
           end
