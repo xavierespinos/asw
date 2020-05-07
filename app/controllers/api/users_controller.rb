@@ -13,16 +13,16 @@ class Api::UsersController < Api::BaseController
   def update
     if @usersController.isValidApiToken(getApiKey)
       user = @usersController.getUserByApiToken(getApiKey)
-      userparam = User.new(user_params_edit)
-        if user.update(user_params_edit)
-           render json: user , status: :ok
-        else
-           render json: @user.errors, status: :unprocessable_entity 
-        end
+      if user.update(user_params_edit)
+        render json: user , status: :ok
+      else
+        render json: @user.errors, status: :unprocessable_entity 
+      end
     else
-         render json: {error: 'wrong apiKey'}, status: :unauthorized
+      render json: {error: 'wrong apiKey'}, status: :unauthorized
     end
   end
+
 
   def result(element)
     if element.nil?
@@ -31,6 +31,7 @@ class Api::UsersController < Api::BaseController
       render json: element, status: :ok
     end
   end
+
 
   def getApiKey()
     result = ""

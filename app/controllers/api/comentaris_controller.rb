@@ -25,6 +25,7 @@ class Api::ComentarisController < Api::BaseController
     end
   end
 
+
   def show
     idComentari = params[:id]
     if !idComentari.nil?
@@ -32,6 +33,7 @@ class Api::ComentarisController < Api::BaseController
       result(comentari)
     end
   end
+
 
   def showReplies
     idComentari = params[:id]
@@ -41,6 +43,7 @@ class Api::ComentarisController < Api::BaseController
       result(comentaris)
     end
   end
+
 
   def getReplies(comentaris)
     comentaris2 = []
@@ -54,6 +57,7 @@ class Api::ComentarisController < Api::BaseController
 
     return comentaris2
   end
+
 
   def replies
     if @usersController.isValidApiToken(getApiKey)
@@ -72,14 +76,14 @@ class Api::ComentarisController < Api::BaseController
           else
             render json: {error: 'not exist comment to add reply'}, status: :bad_request
           end
-        else
-          render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
-        end
       else
-        render json: {error: 'id comment is required'}, status: :bad_request
+        render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
       end
-
+    else
+      render json: {error: 'id comment is required'}, status: :bad_request
+    end
   end
+
 
   def fromuser
     if !params[:id].nil?
@@ -90,15 +94,55 @@ class Api::ComentarisController < Api::BaseController
       render json: "id user required", status: :bad_request
     end
   end
+  
+  
+  def upvote
+    if @usersController.isValidApiToken(getApiKey)
+      @comentari = Comentari.find(params[:id])
+      points = @comentari.points + 1
+      @comentari.update_attribute(:points, points) 
+      respond_to do |format|
+        format.json{ render json: @comentari, status: :ok }
+      end
+    else 
+      respond_to do |format|
+        format.json { render status: :method_not_allowed }
+      end
+    end
+  end
+  
+  
+  def downvote
+    if @usersController.isValidApiToken(getApiKey)
+      @comentari = Comentari.find(params[:id])
+      points = @comentari.points - 1
+      @comentari.update_attribute(:points, points)
+      respond_to do |format|
+        format.json{ render json: @comentari, status: :ok }
+      end
+    else 
+      respond_to do |format|
+        format.json { render status: :method_not_allowed }
+      end
+    end
+  end
+
+  
+  def upvotedfromuser
+    
+  end
+
 
   def comentari_params
     params.require(:comentari).permit(:text, :contribucion_id, :comentari_id)
   end
 
+
   def set_controllers
     @contribucionsController = ComentarisController.new
     @usersController = UsersController.new
   end
+
 
   def result(element)
     if element.nil?
@@ -108,6 +152,7 @@ class Api::ComentarisController < Api::BaseController
     end
   end
 
+
   def resultListFind(list)
     if list.count > 0
       render json: list, status: :ok
@@ -115,6 +160,7 @@ class Api::ComentarisController < Api::BaseController
       render json: {error: 'No content'}, status: :no_content
     end
   end
+
 
   def getApiKey()
     result = ""

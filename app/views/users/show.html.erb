@@ -17,6 +17,13 @@
                       <%= time_ago_in_words(@user.created_at) %>
                     </p>
                     
+                    <% if current_user().id == @user.id %>
+                      <p>
+                        <strong>Apitoken:</strong>
+                        <%=@user.apitoken %>
+                      </p>
+                    <%end%>
+                    
                     <p>
                       <strong>Description:</strong>
                       <%= @user.description %>
