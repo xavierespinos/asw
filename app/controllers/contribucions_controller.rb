@@ -119,17 +119,22 @@ class ContribucionsController < ApplicationController
   #PUT /contribucions/1/upvote
   def upvote
     if params[:desvotar] == "0"
-      #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
-      if !ContribucionsVoted.exists?(user: current_user().id,contribucion: @contribucion.id)
+      updateVote = false
+      if !addContribucionsVoted(current_user().id,@contribucion.id).nil?
         @points = @contribucion.points + 1
-        ContribucionsVoted.create(:user => current_user().id, :contribucion => @contribucion.id)
+        updateVote = true
       end
     else
-      @points = @contribucion.points - 1
+      if deleteContribucionsVoted(current_user().id,@contribucion.id)
+        @points = @contribucion.points - 1
+        updateVote = true
+      end
     end
     if !current_user().nil?
       respond_to do |format|
-        @contribucion.update_attribute(:points, @points) 
+        if updateVote = true
+          addUpVotedContribution(@contribucion)
+        end
         if params[:lloc] == "main"
           format.html { redirect_to contribucions_url}
           format.json { head :no_content } 
@@ -142,6 +147,26 @@ class ContribucionsController < ApplicationController
       redirect_to '/login'
     end
   end
+
+  def addContribucionsVoted(idUser,idContribucio)
+    if !ContribucionsVoted.exists?(user: idUser,contribucion: idContribucio)
+      return  ContribucionsVoted.create(user: idUser,contribucion: idContribucio)
+    end
+    return nil
+  end
+
+  def deleteContribucionsVoted(idUser,idContribucio)
+    if ContribucionsVoted.exists?(user: idUser,contribucion: idContribucio)
+      contribucionsVoted = ContribucionsVoted.where(user: current_user().id, contribucion: @contribucion.id).limit(1)
+      return contribucionsVoted[0].destroy
+    end
+    return false
+  end
+
+  def addUpVotedContribution(contribucion)
+    return contribucion.update_attribute(:points, contribucion.points)
+  end
+
 
   def getAllContribucioUrl
     return Contribucion.all.select{|c| c.url != ""}
