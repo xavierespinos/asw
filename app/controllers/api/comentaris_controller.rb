@@ -88,7 +88,7 @@ class Api::ComentarisController < Api::BaseController
   def fromuser
     if !params[:id].nil?
       idUser = params[:id]
-      comentaris = @contribucionsController.getThreads(idUser)
+      comentaris = @comentarisController.getThreads(idUser)
       result(comentaris)
     else
       render json: "id user required", status: :bad_request
@@ -126,10 +126,9 @@ class Api::ComentarisController < Api::BaseController
       end
     end
   end
-
   
   def upvotedfromuser
-    
+    resultListFind(@comentariscontroller.nombre de la funcion(params[:id]))
   end
 
 
@@ -139,7 +138,7 @@ class Api::ComentarisController < Api::BaseController
 
 
   def set_controllers
-    @contribucionsController = ComentarisController.new
+    @comentarisController = ComentarisController.new
     @usersController = UsersController.new
   end
 

@@ -61,8 +61,7 @@ class ComentarisController < ApplicationController
   
   #PUT /comentaris/1/upVote
   def upvote
-    
-    @points = @comentari.points + 1
+    @points = @comentari.text + 1
     
     if !current_user().nil?
       respond_to do |format|
