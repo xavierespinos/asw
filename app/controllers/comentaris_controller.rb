@@ -71,7 +71,7 @@ class ComentarisController < ApplicationController
       @comentari = Comentari.find(params[:id])
       if params[:desvote] == "0"
         updateVote = false
-        if !addComentarisVoted(current_user().id,@comentari.id).nil?
+        unless addComentarisVoted(current_user().id, @comentari.id).nil?
           @comentari.points += 1
           updateVote = true
         end
@@ -151,5 +151,8 @@ class ComentarisController < ApplicationController
     end
     return nil
   end
+
+
+
 end
 
