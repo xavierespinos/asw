@@ -47,6 +47,12 @@ class ComentarisController < ApplicationController
     @comentaris = getThreads(idUser)
   end
 
+  def liked
+    #::Rails.logger.info "\n***\nVar: #{idUser}\n***\n"
+    idUser = params[:id]
+    @comentaris = getComentarisLiked(idUser)
+    render :partial  => 'comentarisvoted', :locals => { :comentaris => @comentaris }
+  end
 
   def show
     @comentari = Comentari.find(params[:id])
@@ -101,6 +107,15 @@ class ComentarisController < ApplicationController
     comentaris = []
     comentaris += Comentari.where(user_id: idUser,comentari_id: 0)
     return comentaris
+  end
+  
+  def getComentarisLiked(idUser)
+    @comentaris = []
+    @comentarisvoted = ComentarisVoted.where("user = ?", idUser)
+    @comentarisvoted.each do |c|
+      @comentaris << Comentari.find(c.comentari)
+    end
+    return @comentaris
   end
   
 end

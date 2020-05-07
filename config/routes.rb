@@ -39,6 +39,7 @@ post '/contribucions/:contribucion_id/comentaris/new', to: 'comentaris#new'
   get '/contribucions/submitted', to: 'contribucions#submitted', action: :submitted , controller: 'contribucions'
   get '/contribucions/liked', to: 'contribucions#liked', action: :liked , controller: 'contribucions'
   get '/comentaris/threads', to: 'comentaris#threads', action: :threads , controller: 'comentaris'
+  get '/comentaris/liked', to: 'comentaris#liked', action: :liked , controller: 'comentaris'
   get '/users/:id' =>'users#show'
   get '/users/:id/edit', :to => 'users#edit', :as => :user
   
