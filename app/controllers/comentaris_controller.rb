@@ -68,9 +68,13 @@ class ComentarisController < ApplicationController
   #PUT /comentaris/1/upVote
   def upvote
     if !params[:id].nil?
-      if !current_user().nil?
-        @comentari = Comentari.find(params[:id])
+      @comentari = Comentari.find(params[:id])
+      if params[:desvotar] == "0"
         @points = @comentari.points + 1
+      else
+        @points = @comentari.points - 1
+      end
+      if !current_user().nil?
         respond_to do |format|
           @comentari.update_attribute(:points, @points)
           if params[:lloc] == "main"
