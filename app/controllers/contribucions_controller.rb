@@ -121,19 +121,19 @@ class ContribucionsController < ApplicationController
     if params[:desvotar] == "0"
       updateVote = false
       if !addContribucionsVoted(current_user().id,@contribucion.id).nil?
-        @points = @contribucion.points + 1
+        @contribucion.points += 1
         updateVote = true
       end
     else
       if deleteContribucionsVoted(current_user().id,@contribucion.id)
-        @points = @contribucion.points - 1
+        @contribucion.points -= 1
         updateVote = true
       end
     end
     if !current_user().nil?
       respond_to do |format|
-        if updateVote = true
-          addUpVotedContribution(@contribucion)
+        if updateVote
+          addUpVotedContribution(@contribucion.id,@contribucion.points)
         end
         if params[:lloc] == "main"
           format.html { redirect_to contribucions_url}
@@ -163,8 +163,10 @@ class ContribucionsController < ApplicationController
     return false
   end
 
-  def addUpVotedContribution(contribucion)
-    return contribucion.update_attribute(:points, contribucion.points)
+  def addUpVotedContribution(idContribucion,points)
+    c= Contribucion.find(idContribucion)
+    c.points = points
+    return c.update_attribute(:points, points)
   end
 
 
