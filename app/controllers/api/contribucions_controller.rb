@@ -76,9 +76,8 @@ class Api::ContribucionsController < Api::BaseController
       render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
-  #--------------------------------------------------------------------------------------------------------------#
-
-  #---------------------------------------------- Pendiente probar ----------------------------------------------#
+  
+  
   def upvote
     if @usersController.isValidApiToken(getApiKey)
       @contribucion = Contribucion.find(params[:id])
@@ -112,12 +111,10 @@ class Api::ContribucionsController < Api::BaseController
 
 
   def upvotedfromUser
-    
+    resultListFind(@contributionscontroller.getContribucionsLiked(params[:id]))
   end
 
-  #-----------------------------------------------------------------------------------------------------#
 
-  #---------------------------------------------- Probado ----------------------------------------------#
   private
 
   def resultListFind(list)

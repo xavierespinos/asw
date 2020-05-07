@@ -116,7 +116,7 @@ class ContribucionsController < ApplicationController
     render :partial  => 'index', :locals => { :contribucions => @contribucions } 
   end
   
-  #PUT /contribucions/1/uptvote
+  #PUT /contribucions/1/upvote
   def upvote
     if params[:desvotar] == "0"
       @points = @contribucion.points + 1
