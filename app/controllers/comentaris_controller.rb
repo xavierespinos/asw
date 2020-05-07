@@ -71,35 +71,20 @@ class ComentarisController < ApplicationController
       @comentari = Comentari.find(params[:id])
       if params[:desvote] == "0"
         updateVote = false
-<<<<<<< HEAD
-        if !addComentarisVoted(current_user().id,@comentari.id).nil? 
-          @points = @comentari.points + 1
-=======
         if !addComentarisVoted(current_user().id,@comentari.id).nil?
           @comentari.points += 1
->>>>>>> 096ee43c1195c4a8fde3fb285c7ea963a351a4bf
           updateVote = true
         end
       else
         if deleteComentarisVoted(current_user().id,@comentari.id)
-<<<<<<< HEAD
-          @points = @comentari.points - 1
-=======
           @comentari.points -= 1
->>>>>>> 096ee43c1195c4a8fde3fb285c7ea963a351a4bf
           updateVote = true
         end
       end
         respond_to do |format|
           if updateVote
-<<<<<<< HEAD
-            addUpVotedComentaris(@comentari.id, @comentari.points)
-          end
-          @comentari.update_attribute(:points, @points) 
-=======
             @comentari.update_attribute(:points,@comentari.points)
           end
->>>>>>> 096ee43c1195c4a8fde3fb285c7ea963a351a4bf
           if params[:lloc] == "main"
             format.html { redirect_to contribucions_url}
             format.json { head :no_content }
@@ -149,15 +134,6 @@ class ComentarisController < ApplicationController
     end
     return false
   end
-<<<<<<< HEAD
-  
-  def addUpVotedComentaris(idComentari, points)
-    c= Comentari.find(idComentari)
-    c.points = points
-    return c.update_attribute(:points, points)
-  end 
-  
-=======
 
   def addUpVotedComentari(idComentari,add)
     c= Comentari.find(idComentari)
@@ -169,26 +145,11 @@ class ComentarisController < ApplicationController
     return c.update_attribute(:points, c.points)
   end
 
->>>>>>> 096ee43c1195c4a8fde3fb285c7ea963a351a4bf
   def addComentarisVoted(idUser,idComentari)
     if !ComentarisVoted.exists?(user: idUser,comentari: idComentari)
       return  ComentarisVoted.create(user: idUser, comentari: idComentari)
     end
     return nil
   end
-
-<<<<<<< HEAD
-  def deleteComentarisVoted(idUser,idComentari)
-    if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
-      comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
-      return comentarisVoted[0].destroy
-    end
-    return false
-  end
-  
-=======
-
-
->>>>>>> 096ee43c1195c4a8fde3fb285c7ea963a351a4bf
 end
 
