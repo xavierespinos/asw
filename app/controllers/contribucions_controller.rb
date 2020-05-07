@@ -109,10 +109,18 @@ class ContribucionsController < ApplicationController
     end
   end
   
-  #PUT /contribucions/1/uptvote
+  def liked
+    #::Rails.logger.info "\n***\nVar: #{idUser}\n***\n"
+    idUser = params[:id]
+    @contribucions = getContribucionsLiked(idUser)
+    render :partial  => 'index', :locals => { :contribucions => @contribucions } 
+  end
+  
+  #PUT /contribucions/1/upvote
   def upvote
     if params[:desvotar] == "0"
       @points = @contribucion.points + 1
+      ContribucionsVoted.create(:user => current_user().id, :contribucion => @contribucion.id)
     else
       @points = @contribucion.points - 1
     end
@@ -150,6 +158,15 @@ class ContribucionsController < ApplicationController
 
   def getContribucionsUser(idUser)
     return Contribucion.where("user_id = ?", idUser)
+  end
+  
+  def getContribucionsLiked(idUser)
+    @contribucions = []
+    @contribucionsvoted = ContribucionsVoted.where("user = ?", idUser)
+    @contribucionsvoted.each do |c|
+      @contribucions << Contribucion.find(c.contribucion)
+    end
+    return @contribucions
   end
 
   def addComment(idUser,idContribucion,content)

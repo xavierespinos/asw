@@ -499,7 +499,59 @@ paths:
   /contribucions/user/{id}:
     get:
       summary: Get all contributions from user
-      description: Get all comments from user with id = "id"
+      description: Get all contributions from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: user not found
+  
+  /comentaris/upvoted/user/{id}:
+    get:
+      summary: Get all upvoted comments from user
+      description: Get all upvoted comments from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: user not found
+
+  /contribucions/upvoted/user/{id}:
+    get:
+      summary: Get all upvoted contributions from user
+      description: Get all upvoted contributions from user with id = "id"
       tags:
         - Users
       parameters:

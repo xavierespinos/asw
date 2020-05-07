@@ -10,7 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_05_07_163920) do
+=======
+ActiveRecord::Schema.define(version: 2020_05_07_175325) do
+
+>>>>>>> 90c359538849536ad2f036b5e2f7ba5d78820fd4
   create_table "comentaris", force: :cascade do |t|
     t.string "text", null: false
     t.integer "contribucion_id", null: false
@@ -34,6 +39,13 @@ ActiveRecord::Schema.define(version: 2020_05_07_163920) do
     t.integer "points", default: 0
     t.string "tipo"
     t.index ["user_id", "created_at"], name: "index_contribucions_on_user_id_and_created_at"
+  end
+
+  create_table "contribucions_voteds", force: :cascade do |t|
+    t.integer "user"
+    t.integer "contribucion"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|

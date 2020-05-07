@@ -76,9 +76,8 @@ class Api::ContribucionsController < Api::BaseController
       render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
     end
   end
-  #--------------------------------------------------------------------------------------------------------------#
-
-  #---------------------------------------------- Pendiente probar ----------------------------------------------#
+  
+  
   def upvote
     if @usersController.isValidApiToken(getApiKey)
       @contribucion = Contribucion.find(params[:id])
@@ -93,14 +92,29 @@ class Api::ContribucionsController < Api::BaseController
       end
     end
   end
-
-  def upvotedfromUser
-    
+  
+  
+  def downvote
+    if @usersController.isValidApiToken(getApiKey)
+      @contribucion = Contribucion.find(params[:id])
+      points = @contribucion.points - 1
+      @contribucion.update_attribute(:points, points) 
+      respond_to do |format|
+        format.json{ render json: @contribucion, status: :ok }
+      end
+    else 
+      respond_to do |format|
+        format.json { render json: {errors: 'Method not Allowed'}, status: :method_not_allowed }
+      end
+    end
   end
 
-  #-----------------------------------------------------------------------------------------------------#
 
-  #---------------------------------------------- Probado ----------------------------------------------#
+  def upvotedfromUser
+    resultListFind(@contributionscontroller.getContribucionsLiked(params[:id]))
+  end
+
+
   private
 
   def resultListFind(list)
