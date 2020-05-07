@@ -119,8 +119,11 @@ class ContribucionsController < ApplicationController
   #PUT /contribucions/1/upvote
   def upvote
     if params[:desvotar] == "0"
-      @points = @contribucion.points + 1
-      ContribucionsVoted.create(:user => current_user().id, :contribucion => @contribucion.id)
+      #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
+      if !ContribucionsVoted.exists?(user: current_user().id,contribucion: @contribucion.id)
+        @points = @contribucion.points + 1
+        ContribucionsVoted.create(:user => current_user().id, :contribucion => @contribucion.id)
+      end
     else
       @points = @contribucion.points - 1
     end
@@ -153,7 +156,7 @@ class ContribucionsController < ApplicationController
   end
 
   def getUser(idUser)
-    return User.find(2)
+    return User.find(idUser)
   end
 
   def getContribucionsUser(idUser)

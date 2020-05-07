@@ -61,21 +61,23 @@ class ComentarisController < ApplicationController
   
   #PUT /comentaris/1/upVote
   def upvote
-    @points = @comentari.text + 1
-    
-    if !current_user().nil?
-      respond_to do |format|
-        @comentari.update_attribute(:points, @points) 
-        if params[:lloc] == "main"
-          format.html { redirect_to contribucions_url}
-          format.json { head :no_content } 
-        else 
-          format.html { redirect_to @comentari}
-          format.json { head :no_content }
+    if !params[:id].nil?
+      if !current_user().nil?
+        @comentari = Comentari.find(params[:id])
+        @points = @comentari.points + 1
+        respond_to do |format|
+          @comentari.update_attribute(:points, @points)
+          if params[:lloc] == "main"
+            format.html { redirect_to contribucions_url}
+            format.json { head :no_content }
+          else
+            format.html { redirect_to @comentari}
+            format.json { head :no_content }
+          end
         end
+      else
+        redirect_to '/login'
       end
-    else
-      redirect_to '/login'
     end
   end
   
@@ -102,3 +104,4 @@ class ComentarisController < ApplicationController
   end
   
 end
+

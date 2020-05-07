@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_175325) do
+ActiveRecord::Schema.define(version: 2020_05_07_192949) do
 
   create_table "comentaris", force: :cascade do |t|
     t.string "text", null: false
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 2020_05_07_175325) do
     t.integer "commentable_id"
     t.integer "points", default: 0
     t.index ["commentable_type", "commentable_id"], name: "index_comentaris_on_commentable_type_and_commentable_id"
+  end
+
+  create_table "comentaris_voteds", force: :cascade do |t|
+    t.integer "user"
+    t.integer "comentari"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "contribucions", force: :cascade do |t|
