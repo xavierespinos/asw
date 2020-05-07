@@ -109,29 +109,13 @@ class ContribucionsController < ApplicationController
     end
   end
   
-  #PUT /contribucions/1/downvote
-  def downvote
-    @points = @contribucion.points - 1
-
-    if !current_user().nil?
-      respond_to do |format|
-        @contribucion.update_attribute(:points, @points) 
-        if params[:lloc] == "main"
-          format.html { redirect_to contribucions_url}
-          format.json { head :no_content } 
-        else 
-          format.html { redirect_to @contribucion}
-          format.json { head :no_content }
-        end
-      end
-    else
-      redirect_to '/login'
-    end
-  end
-  
   #PUT /contribucions/1/uptvote
   def upvote
-    @points = @contribucion.points + 1
+    if params[:desvotar] == "0"
+      @points = @contribucion.points + 1
+    else
+      @points = @contribucion.points - 1
+    end
     if !current_user().nil?
       respond_to do |format|
         @contribucion.update_attribute(:points, @points) 
@@ -161,7 +145,7 @@ class ContribucionsController < ApplicationController
   end
 
   def getUser(idUser)
-    return User.find(idUser)
+    return User.find(2)
   end
 
   def getContribucionsUser(idUser)

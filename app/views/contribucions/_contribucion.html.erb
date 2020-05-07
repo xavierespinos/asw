@@ -5,9 +5,9 @@
     </td>
   <td class="votelinks" valign="top">
     <center>
-      <a id="up_22681207" <%= link_to '▲', upvote_contribucion_path(contribucion, :lloc => "main"), method: :put %>
+      <a id="up_22681207" <%= link_to '▲', upvote_contribucion_path(contribucion, :lloc => "main", :desvotar => "0"), method: :put %>
       </a>
-      <a id="up_22681207" <%= link_to '▼', downvote_contribucion_path(contribucion, :lloc => "main"), method: :put %>
+      <a id="down" <%= link_to '▼', upvote_contribucion_path(contribucion, :lloc => "main", :desvotar => "1"), method: :put %>
       </a>
     </center>
   </td>
