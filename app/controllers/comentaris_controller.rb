@@ -70,17 +70,22 @@ class ComentarisController < ApplicationController
     if !params[:id].nil?
       @comentari = Comentari.find(params[:id])
       if params[:desvote] == "0"
-        #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
-        if !ComentarisVoted.exists?(user: current_user().id, comentari: @comentari.id)
+        updateVote = false
+        if !addComentarisVoted(current_user().id,@comentari.id).nil? 
           @points = @comentari.points + 1
-          ComentarisVoted.create(:user => current_user().id, :comentari => @comentari.id)
+          updateVote = true
         end
       else
-        @points = @comentari.points - 1
-        deleteComentariVoted(current_user().id, @comentari.id)
+        if deleteComentarisVoted(current_user().id,@comentari.id)
+          @points = @comentari.points - 1
+          updateVote = true
+        end
       end
       if !current_user().nil?
         respond_to do |format|
+          if updateVote
+            addUpVotedComentaris(@comentari)
+          end
           @comentari.update_attribute(:points, @points) 
           if params[:lloc] == "main"
             format.html { redirect_to contribucions_url}
@@ -129,6 +134,25 @@ class ComentarisController < ApplicationController
   
   def deleteComentariVoted(idUser,idComentari)
     if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
+      comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
+      return comentarisVoted[0].destroy
+    end
+    return false
+  end
+  
+  def addUpVotedComentaris(comentari)
+    return cocomentari.update_attribute(:points, comentari.points)
+  end 
+  
+  def addComentarisVoted(idUser,idComentari)
+    if !ComentarisVoted.exists?(user: idUser,comentari: idComentari)
+      return  ComentarisVoted.create(user: idUser,comentari: idComentari)
+    end
+    return nil
+  end
+
+  def deleteComentariVoted(idUser,idComentari)
+    if ComentarisVoted.exists?(user: idUser,contribucion: idContribucio)
       comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
       return comentarisVoted[0].destroy
     end

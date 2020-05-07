@@ -132,7 +132,7 @@ class ContribucionsController < ApplicationController
     end
     if !current_user().nil?
       respond_to do |format|
-        if updateVote = true
+        if updateVote
           addUpVotedContribution(@contribucion)
         end
         if params[:lloc] == "main"
