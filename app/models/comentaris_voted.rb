@@ -1,0 +1,2 @@
+class ComentarisVoted < ApplicationRecord
+end
