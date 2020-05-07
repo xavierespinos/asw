@@ -69,14 +69,15 @@ class ComentarisController < ApplicationController
   def upvote
     if !params[:id].nil?
       @comentari = Comentari.find(params[:id])
-      if params[:desvotar] == "0"
+      if params[:desvote] == "0"
         #Contribucion.exists?(url: @param) #si es un text o url nou el guarda
-        if !ComentarisVoted.exists?(user: current_user().id,contribucion: @comentari.id)
+        if !ComentarisVoted.exists?(user: current_user().id, comentari: @comentari.id)
           @points = @comentari.points + 1
           ComentarisVoted.create(:user => current_user().id, :comentari => @comentari.id)
         end
       else
         @points = @comentari.points - 1
+        deleteComentariVoted(current_user().id, @comentari.id)
       end
       if !current_user().nil?
         respond_to do |format|
@@ -124,6 +125,14 @@ class ComentarisController < ApplicationController
       @comentaris << Comentari.find(c.comentari)
     end
     return @comentaris
+  end
+  
+  def deleteComentariVoted(idUser,idComentari)
+    if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
+      comentarisVoted = ComentarisVoted.where(user: current_user().id, comentari: @comentari.id).limit(1)
+      return comentarisVoted[0].destroy
+    end
+    return false
   end
   
 end

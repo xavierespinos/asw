@@ -46,7 +46,7 @@
                     
                     <p>
                       <strong>Upvoted coments:</strong>
-                      <%= link_to 'upvoted comments',comentaris_liked_path(:user_id => @user.id),method: "get"  %>
+                      <%= link_to 'upvoted comments',comentaris_liked_path(:id => @user.id),method: "get"  %>
                     </p>
                     
                     <% if current_user().id == @user.id %>
