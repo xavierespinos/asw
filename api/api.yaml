@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   version: '1.0.0'
   title: HackerNews
-  description: "Open API of HackerNews ASW Project by Adrian Alvarez,Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
+  description: "Open API of HackerNews ASW Project by Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
   - url: 'http://184.73.116.170/api'
 
@@ -12,11 +12,11 @@ paths:
   /users:
     put:
       summary: Update an user
-      description: Return information of userId
+      description: Return information of the user updated
       tags:
         - Users
       requestBody:
-        description: Optional description in Markdown
+        description: Name and Description to update
         required: true
         content:
           application/json:
@@ -25,7 +25,7 @@ paths:
       parameters:
         - name: apiKey
           in: header
-          description: id from user
+          description: api-key from user
           required: true
           schema:
             type: string
@@ -37,11 +37,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        401:
+          description: unauthorized operation
 
   /users/{id}:
     get:
       summary: Show an User
-      description: Return information of userId
+      description: Return information of the user with id = "id"
       tags:
         - Users
       parameters:
@@ -59,11 +61,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        404:
+          description: user not found
 
   /contribucions:
     get:
       summary: All Contribution
-      description: Returns all contributions that are contains content
+      description: Returns all the contributions in the system
       tags:
         - Contributions
       responses:
@@ -89,21 +93,21 @@ paths:
       parameters:
         - name: apiKey
           in: header
-          description: id from contribution
+          description: api-key from user
           required: true
           schema:
             type: string
             format: string
 
       responses:
-        200:
-          description: successful operation
+        201:
+          description: contribution created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contribution'
-        404:
-          description: Method not found
+        401:
+          description: Invalid ApiKey
 
   /contribucions/asks:
     get:
@@ -120,11 +124,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contributions not found
 
   /contribucions/urls:
     get:
       summary: All urls Contributions
-      description: Returns all contributions that are tipe new
+      description: Returns all contributions that are tipe url
       tags:
         - Contributions
       responses:
@@ -136,11 +142,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contributions not found
 
   /contribucions/{id}:
     get:
       summary: Show a Contribution
-      description: Returns a contribution
+      description: Returns a contribution with id = "id"
       tags:
         - Contributions
       parameters:
@@ -158,10 +166,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contribution not found
 
     delete:
       summary: Deletes a Contribution
-      description: Deletes a contribution
+      description: Deletes a contribution with id = "id"
       tags:
         - Contributions
       parameters:
@@ -174,7 +184,7 @@ paths:
             format: int32
         - name: apiKey
           in: header
-          description: api de l'usuari
+          description: api-key from user
           required: true
           schema:
             type: string
@@ -182,6 +192,8 @@ paths:
       responses:
         200:
           description: successful operation
+        401:
+          description: unauthorized operation
 
 
     post:
@@ -205,30 +217,32 @@ paths:
             format: int32
         - name: apiKey
           in: header
-          description: api de l'usuari
+          description: api-key from user
           required: true
           schema:
             type: string
             format: string
       responses:
-        200:
-          description: successful operation
+        201:
+          description: comment created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+        401:
+          description: Invalid ApiKey
 
   /comentaris/{id}:
 
     get:
       summary: Show a comment
-      description: Shows a comment
+      description: Shows a comment with id = "id"
       tags:
         - Comments
       parameters:
         - name: id
           in: path
-          description: ID from comment
+          description: id from comment
           required: true
           schema:
             title: integer
@@ -240,6 +254,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+        404:
+          description: Comment not found
 
     post:
       summary: Create a reply comment
@@ -255,14 +271,159 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ID from comment
+          description: id from comment
           required: true
           schema:
             title: integer
             format: int32
         - name: apiKey
           in: header
-          description: api from user
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        201:
+          description: reply comment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: Invalid ApiKey
+
+  /comentaris/{id}/replies:
+    get:
+      summary: All replies from a coment
+      description: Returns all replies from coment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: Comment not found
+
+  /contribucions/{id}/comentaris:
+    get:
+      summary: All Comments from contribution
+      description: Returns all coments from contribution with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: Contribution not found
+
+  /contribucions/{id}/vote:
+    put:
+      summary: Vote a contribution
+      description: Increments a vote from contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: query
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        401:
+          description: unauthorized operation
+
+  /contribucions/{id}/downvote:
+    put:
+      summary: Downvote a contribution
+      description: Decrements a vote from contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: query
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        401:
+          description: unauthorized operation
+                
+  /comentaris/{id}/vote:
+    put:
+      summary: Vote a comment
+      description: Increments a vote from comment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: query
+          description: api-key from user
           required: true
           schema:
             type: string
@@ -274,72 +435,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+        401:
+          description: unauthorized operation
 
-  /comentaris/{id}/replies:
-    get:
-      summary: All Comments from contribution
-      description: Returns all coments from contribution id
-      tags:
-        - Comments
-      parameters:
-        - name: id
-          in: path
-          description: id from user
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
-
-  /contribucions/{id}/comentaris:
-    get:
-      summary: All Comments from contribution
-      description: Returns all coments from contribution id
-      tags:
-        - Comments
-      parameters:
-        - name: id
-          in: path
-          description: id from user
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
-
-  /contribucions/{id}/vote:
+  /comentaris/{id}/downvote:
     put:
-      summary: Vote a contribution
-      description: Increments number of votes from a contribution
+      summary: Downvote a comment
+      description: Decrements a vote from comment with id = "id"
       tags:
-        - Contributions
+        - Comments
       parameters:
         - name: id
           in: path
-          description: id from user
+          description: id from comment
           required: true
           schema:
             type: integer
             format: int32
         - name: apiKey
           in: query
-          description: apiKey of the user, showd correspond with the id
+          description: api-key from user
           required: true
           schema:
             type: string
@@ -350,40 +465,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contribution'
-
-  /contribucions/{id}/downvote:
-    put:
-      summary: Vote a contribution
-      description: Increments number of votes from a contribution
-      tags:
-        - Contributions
-      parameters:
-        - name: id
-          in: path
-          description: id from user
-          required: true
-          schema:
-            type: integer
-            format: int32
-        - name: apiKey
-          in: query
-          description: apiKey of the user, showd correspond with the id
-          required: true
-          schema:
-            type: string
-            format: string
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contribution'
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: unauthorized operation
+                
+  
   /comentaris/user/{id}:
     get:
       summary: Get all comments from user
-      description: Get all comments from user id
+      description: Get all comments from user with id = "id"
       tags:
         - Users
       parameters:
@@ -403,11 +493,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
+        404:
+          description: user not found
 
   /contribucions/user/{id}:
     get:
       summary: Get all contributions from user
-      description: Get all comments from user id
+      description: Get all comments from user with id = "id"
       tags:
         - Users
       parameters:
@@ -427,6 +519,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contribution'
+        404:
+          description: user not found
 
 components:
   schemas:
