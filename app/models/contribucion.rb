@@ -1,4 +1,5 @@
 class Contribucion < ApplicationRecord
+  serialize :usersvoted
   has_many :comentaris
 	default_scope -> { order(points: :desc) }
 	validate :onlyAskOrURL
