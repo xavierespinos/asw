@@ -5,7 +5,7 @@ info:
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: 'http://184.73.116.170:8080/api'
+  - url: 'http://localhost:3000/api'
 
 paths:
 
@@ -360,7 +360,7 @@ paths:
             type: integer
             format: int32
         - name: apiKey
-          in: query
+          in: header
           description: api-key from user
           required: true
           schema:
@@ -375,6 +375,10 @@ paths:
                 $ref: '#/components/schemas/Contribution'
         401:
           description: unauthorized operation
+        400:
+          description: Contribution already voted
+        404:
+          description: Contribution not found
 
   /contribucions/{id}/downvote:
     put:
@@ -391,7 +395,7 @@ paths:
             type: integer
             format: int32
         - name: apiKey
-          in: query
+          in: header
           description: api-key from user
           required: true
           schema:
@@ -406,7 +410,11 @@ paths:
                 $ref: '#/components/schemas/Contribution'
         401:
           description: unauthorized operation
-                
+        404:
+          description: Contribution not voted
+        400:
+          description: Contribution id required
+
   /comentaris/{id}/vote:
     put:
       summary: Vote a comment
@@ -422,7 +430,7 @@ paths:
             type: integer
             format: int32
         - name: apiKey
-          in: query
+          in: header
           description: api-key from user
           required: true
           schema:
@@ -453,7 +461,7 @@ paths:
             type: integer
             format: int32
         - name: apiKey
-          in: query
+          in: header
           description: api-key from user
           required: true
           schema:
@@ -468,8 +476,8 @@ paths:
                 $ref: '#/components/schemas/Comment'
         401:
           description: unauthorized operation
-                
-  
+
+
   /comentaris/user/{id}:
     get:
       summary: Get all comments from user
@@ -521,7 +529,7 @@ paths:
                   $ref: '#/components/schemas/Contribution'
         404:
           description: user not found
-  
+
   /comentaris/upvoted/user/{id}:
     get:
       summary: Get all upvoted comments from user
