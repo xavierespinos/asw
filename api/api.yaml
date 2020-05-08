@@ -5,7 +5,7 @@ info:
   title: HackerNews
   description: "Open API of HackerNews ASW Project by Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
 servers:
-  - url: 'http://localhost:3000/api'
+  - url: 'https://gentle-retreat-46236.herokuapp.com/api'
 
 paths:
 
