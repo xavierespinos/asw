@@ -169,7 +169,6 @@ class ContribucionsController < ApplicationController
     return c.update_attribute(:points, c.points)
   end
 
-
   def getAllContribucioUrl
     return Contribucion.all.select{|c| c.url != ""}
   end
@@ -187,7 +186,7 @@ class ContribucionsController < ApplicationController
   end
 
   def getContribucionsUser(idUser)
-    return Contribucion.where("user_id = ?", idUser)
+    return Contribucion.where(user: idUser)
   end
   
   def getContribucionsLiked(idUser)
