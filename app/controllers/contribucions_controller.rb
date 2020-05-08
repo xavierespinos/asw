@@ -186,7 +186,7 @@ class ContribucionsController < ApplicationController
   end
 
   def getContribucionsUser(idUser)
-    return Contribucion.where(user: idUser)
+    return Contribucion.where(uid: idUser)
   end
   
   def getContribucionsLiked(idUser)
