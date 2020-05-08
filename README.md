@@ -10,6 +10,4 @@ Sergio Pascual
 
 Xavier Espinos
 
-HEROKU: https://warm-brook-49448.herokuapp.com/
-
-API: 
+HEROKU: https://gentle-retreat-46236.herokuapp.com/
