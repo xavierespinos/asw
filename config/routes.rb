@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
     get '/api/users/:id' => 'api/users#show' # get info usuari FET
     put '/api/users' => 'api/users#update' # update info usuari FET
+    post '/api/users/login' => 'api/users#login' # update info usuari FET
 
     get '/api/comentaris/:id' =>'api/comentaris#show' # get comentari FET
     get '/api/comentaris/user/:id' =>'api/comentaris#fromuser' # get comentaris d'un usuari FET

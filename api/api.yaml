@@ -64,6 +64,29 @@ paths:
         404:
           description: user not found
 
+  /users/login:
+    post:
+      summary: Login user
+      description: Return apiKey
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        404:
+          description: user not found
+
+
   /contribucions:
     get:
       summary: All Contribution
@@ -650,6 +673,23 @@ components:
         timestamp:
           type: string
           description: Datetime when the user was created
+
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Name user
+        pass:
+          type: string
+          description: Password login user
+
+    UserLoginResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: Unique identifier for the user (apiKey)
 
     Contribution:
       type: object

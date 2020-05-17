@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_192949) do
   end
 
   create_table "comentaris_voteds", force: :cascade do |t|
-    t.integer "user"
+    t.integer "uid"
     t.integer "comentari"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -83,6 +83,15 @@ class UsersController < ApplicationController
     return User.find(idUser)
   end
 
+  def getUserByLogin(email,pass)
+    users = User.where(email: email).limit(1)
+     if (!users.nil? and users.count > 0)
+       if (users[0].valid_password?(pass))
+         return users[0]
+       end
+     end
+     return nil
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
