@@ -47,7 +47,7 @@ class Api::ContribucionsController < Api::BaseController
   # POST /contribucions/1.json
   def new
      if @usersController.isValidApiToken(getApiKey)
-       if !@contribucionsController.getContribucioByUrl(contribucion_params[:url]).nil?
+       if @contribucionsController.getContribucioByUrl(contribucion_params[:url]).nil?
          contribucio = Contribucion.new(contribucion_params)
          contribucio.user_id = @usersController.getUserByApiToken(getApiKey).id
          if @contribucionsController.addContribucio(contribucio)
@@ -56,7 +56,8 @@ class Api::ContribucionsController < Api::BaseController
            render json: {error: 'Contribucio not created'}, status: :bad_request
          end
        else
-         render json: {error: 'Contribucio url exist'}, status: :bad_request
+         contribucio = @contribucionsController.getContribucioByUrl(contribucion_params[:url])[0]
+         render json: contribucio, status: :ok
        end
      else
        render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized

@@ -170,11 +170,11 @@ class ContribucionsController < ApplicationController
   end
 
   def getAllContribucioUrl
-    return Contribucion.all.select{|c| c.url != ""}
+    return Contribucion.where(tipo: "url")
   end
 
   def getAllContribucioAsk
-    return Contribucion.all.select{|c| c.text != ""}
+    return Contribucion.where(tipo: "ask")
   end
 
   def getAllContribucio
@@ -213,7 +213,7 @@ class ContribucionsController < ApplicationController
   end
 
   def getContribucioByUrl(contUrl)
-    return Contribucion.all.select{|c| c.url == @param}
+    return Contribucion.where(url: contUrl)
   end
 
   def getContribucioById(idContribucion)
