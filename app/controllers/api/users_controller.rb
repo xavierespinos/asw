@@ -14,7 +14,7 @@ class Api::UsersController < Api::BaseController
       pass = params[:pass]
       user = @usersController.getUserByLogin(email,pass)
       if !user.nil?
-        render json: {apiKey: user.apitoken}  , status: :ok
+        render json: {apiKey: user.apitoken,id: user.id,email: user.email}  , status: :ok
       else
         render json:{error: 'Bad login'}, status: :unauthorized
       end

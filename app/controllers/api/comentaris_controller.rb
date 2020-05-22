@@ -27,31 +27,39 @@ class Api::ComentarisController < Api::BaseController
 
 
   def show
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
     idComentari = params[:id]
     if !idComentari.nil?
-      comentari = Comentari.find(idComentari)
+      comentari = Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').find(idComentari)
       result(comentari)
     end
   end
 
   def showReplies
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
     idComentari = params[:id]
     if !idComentari.nil?
-      comentaris = Comentari.where(comentari_id: idComentari)
-      comentaris += getReplies(comentaris)
+      comentaris = Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').where(comentari_id: idComentari)
+      comentaris += getReplies(comentaris,idUser)
       result(comentaris)
     end
   end
 
 
-  def getReplies(comentaris)
+  def getReplies(comentaris,idUser)
     comentaris2 = []
     comentaris.each do |c|
-      comentaris2 += Comentari.where(comentari_id: c.id)
+      comentaris2 += Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').where(comentari_id: c.id)
     end
 
     if comentaris2.count > 0
-      comentaris2 += getReplies(comentaris2)
+      comentaris2 += getReplies(comentaris2,idUser)
     end
 
     return comentaris2
@@ -87,7 +95,7 @@ class Api::ComentarisController < Api::BaseController
   def fromuser
     if !params[:id].nil?
       idUser = params[:id]
-      comentaris = @comentarisController.getThreads(idUser)
+      comentaris = @comentarisController.getThreadsApi(idUser)
       result(comentaris)
     else
       render json: "id user required", status: :bad_request
@@ -101,7 +109,7 @@ class Api::ComentarisController < Api::BaseController
         u = @usersController.getUserByApiToken(getApiKey)
         if !@comentarisController.addComentarisVoted(u.id,params[:id]).nil?
           @comentarisController.addUpVotedComentari(params[:id],true)
-          c = Comentari.find(params[:id])
+          c = Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(u.id)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').find(params[:id])
           result(c)
         else
           render json: {error: "Comment already voted"}, status: :bad_request
@@ -121,7 +129,7 @@ class Api::ComentarisController < Api::BaseController
         u = @usersController.getUserByApiToken(getApiKey)
         if @comentarisController.deleteComentarisVoted(u.id,params[:id])
           @comentarisController.addUpVotedComentari(params[:id],false)
-          c = Comentari.find(params[:id])
+          c = Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(u.id)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').find(params[:id])
           result(c)
         else
           render json: {error: "Comment not voted"}, status: :not_found
@@ -136,7 +144,7 @@ class Api::ComentarisController < Api::BaseController
 
   def upvotedfromuser
     if !params[:id].nil?
-      resultListFind(@comentarisController.getComentarisLiked(params[:id]))
+      resultListFind(@comentarisController.getComentarisLikedApi(params[:id]))
     else
       render json: {error: "Need id user"}, status: :bad_request
     end

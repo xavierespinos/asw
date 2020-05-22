@@ -5,8 +5,12 @@ class Api::ContribucionsController < Api::BaseController
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def urls
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
     if params[:id].nil?
-      resultListFind(@contribucionsController.getAllContribucioUrl)
+      resultListFind(@contribucionsController.getAllContribucioUrlApi(idUser))
     else
       show
     end
@@ -15,32 +19,48 @@ class Api::ContribucionsController < Api::BaseController
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def asks
-    resultListFind(@contribucionsController.getAllContribucioAsk)
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
+    resultListFind(@contribucionsController.getAllContribucioAskApi(idUser))
   end
   
   # GET /contribucions/api/contribucions
   # GET /contribucions.json
   def news
-    resultListFind(@contribucionsController.getAllContribucio)
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
+    resultListFind(@contribucionsController.getAllContribucioApi(idUser))
   end
   
   # GET /api/contribucions/1
   # GET /contribucions/1.json
   def show
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
     idContribucio = params[:id]
-    result(@contribucionsController.getContribucioById(idContribucio))
+    result(@contribucionsController.getContribucioById(idContribucio,idUser))
   end
 
   def fromUser
-    resultListFind(Contribucion.where(user_id:params[:id]))
+    resultListFind(@contribucionsController.getContribucioByIdUser(params[:id]))
   end
 
   # GET /api/contribucions/:id/comentaris
   # GET /comentaris.json
   def comentaris
-      idContribucio = params[:id]
-      @comments = @contribucionsController.getComentarisContribucio(idContribucio)
-      resultListFind(@comments)
+    idUser = 0
+    if @usersController.isValidApiToken(getApiKey)
+      idUser = @usersController.getUserByApiToken(getApiKey).id
+    end
+    idContribucio = params[:id]
+    @comments = @contribucionsController.getComentarisContribucioApi(idContribucio,idUser)
+    resultListFind(@comments)
   end
   
   # POST /contribucions/api/contribucions/1
@@ -85,7 +105,7 @@ class Api::ContribucionsController < Api::BaseController
         u = @usersController.getUserByApiToken(getApiKey)
         if !@contribucionsController.addContribucionsVoted(u.id,params[:id]).nil?
           @contribucionsController.addUpVotedContribution(params[:id],true)
-          c = Contribucion.find(params[:id])
+          c = @contribucionsController.getContribucioById(params[:id],u.id)
           result(c)
         else
           render json: {error: "Contribution already voted"}, status: :bad_request
@@ -129,7 +149,7 @@ class Api::ContribucionsController < Api::BaseController
   private
 
   def resultListFind(list)
-    if list.count > 0
+    if list.length > 0
       render json: list, status: :ok
     else
       render json: {error: 'No content'}, status: :no_content

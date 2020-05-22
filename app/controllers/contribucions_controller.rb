@@ -170,15 +170,30 @@ class ContribucionsController < ApplicationController
   end
 
   def getAllContribucioUrl
-    return Contribucion.where(tipo: "url")
+    return Contribucion.where(tipo: "url").order("created_at DESC")
   end
 
   def getAllContribucioAsk
-    return Contribucion.where(tipo: "ask")
+    return Contribucion..where(tipo: "ask").order("created_at DESC")
   end
 
   def getAllContribucio
     return Contribucion.all.order("created_at DESC")
+  end
+
+  def getAllContribucioUrlApi(idUser)
+     result = Contribucion.all.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(tipo: "url").order("created_at DESC")
+     return result
+  end
+
+  def getAllContribucioAskApi(idUser)
+     result = Contribucion.all.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(tipo: "ask").order("created_at DESC")
+     return result
+  end
+
+  def getAllContribucioApi(idUser)
+    result =  Contribucion.all.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').order("created_at DESC")
+    return result
   end
 
   def getUser(idUser)
@@ -199,7 +214,7 @@ class ContribucionsController < ApplicationController
   end
 
   def addComment(idUser,idContribucion,content)
-    contribucion = getContribucioById(idContribucion)
+    contribucion = getContribucioById(idContribucion,0)
     return contribucion.comentaris.create(text: content, user_id: idUser)
   end
 
@@ -213,11 +228,17 @@ class ContribucionsController < ApplicationController
   end
 
   def getContribucioByUrl(contUrl)
-    return Contribucion.where(url: contUrl)
+    return Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(url: contUrl)
   end
 
-  def getContribucioById(idContribucion)
-    return Contribucion.find(idContribucion)
+  def getContribucioByIdUser(idUser)
+    return Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(user: idUser)
+  end
+
+
+  def getContribucioById(idContribucion,idUser)
+    return  Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').find(idContribucion )
+
   end
 
   def addContribucio(contribucion)
@@ -231,6 +252,10 @@ class ContribucionsController < ApplicationController
 
   def getComentarisContribucio(idContribucio)
     return Comentari.where("contribucion_id = ?", idContribucio)
+  end
+
+  def getComentarisContribucioApi(idContribucio,idUser)
+    return Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').where("contribucion_id = ?", idContribucio)
   end
 
   private

@@ -118,6 +118,12 @@ class ComentarisController < ApplicationController
     return comentaris
   end
 
+  def getThreadsApi(idUser)
+    comentaris = []
+    comentaris += Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').where(user_id: idUser,comentari_id: 0)
+    return comentaris
+  end
+
   def getComentarisLiked(idUser)
     @comentaris = []
     @comentarisvoted = ComentarisVoted.where("user = ?", idUser)
@@ -127,9 +133,18 @@ class ComentarisController < ApplicationController
     return @comentaris
   end
 
+  def getComentarisLikedApi(idUser)
+    @comentaris = []
+    @comentarisvoted = Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').where("user = ?", idUser)
+    @comentarisvoted.each do |c|
+      @comentaris << Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').find(c.comentari)
+    end
+    return @comentaris
+  end
+
   def deleteComentarisVoted(idUser,idComentari)
-    if ComentarisVoted.exists?(user: idUser,comentari: idComentari)
-      comentarisVoted = ComentarisVoted.where(user: idUser, comentari: idComentari).limit(1)
+    if ComentarisVoted.exists?(uid: idUser,comentari: idComentari)
+      comentarisVoted = ComentarisVoted.where(uid: idUser, comentari: idComentari).limit(1)
       return comentarisVoted[0].destroy
     end
     return false
@@ -146,8 +161,8 @@ class ComentarisController < ApplicationController
   end
 
   def addComentarisVoted(idUser,idComentari)
-    if !ComentarisVoted.exists?(user: idUser,comentari: idComentari)
-      return  ComentarisVoted.create(user: idUser, comentari: idComentari)
+    if !ComentarisVoted.exists?(uid: idUser,comentari: idComentari)
+      return  ComentarisVoted.create(uid: idUser, comentari: idComentari)
     end
     return nil
   end
