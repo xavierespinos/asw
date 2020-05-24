@@ -67,7 +67,8 @@ class Api::ContribucionsController < Api::BaseController
   # POST /contribucions/1.json
   def new
      if @usersController.isValidApiToken(getApiKey)
-       if @contribucionsController.getContribucioByUrl(contribucion_params[:url]).nil?
+       idUser = @usersController.getUserByApiToken(getApiKey).id
+       if contribucion_params[:url] == "" or contribucion_params[:url].nil? or @contribucionsController.getContribucioByUrl(contribucion_params[:url],idUser).nil?
          contribucio = Contribucion.new(contribucion_params)
          contribucio.user_id = @usersController.getUserByApiToken(getApiKey).id
          if @contribucionsController.addContribucio(contribucio)
@@ -76,13 +77,29 @@ class Api::ContribucionsController < Api::BaseController
            render json: {error: 'Contribucio not created'}, status: :bad_request
          end
        else
-         contribucio = @contribucionsController.getContribucioByUrl(contribucion_params[:url])[0]
+         contribucio = @contribucionsController.getContribucioByUrl(contribucion_params[:url],idUser)[0]
          render json: contribucio, status: :ok
        end
      else
        render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
      end
   end
+
+  def update
+    if(!params[:id].nil? and !params[:title].nil? and ( !params[:text].nil? or !params[:url].nil?) )
+      contribucion = Contribucion.find(params[:id])
+      if(contribucion.nil?)
+        render json: {error: 'Not found'}, status: :not_found
+      else
+        if @usersController.isValidApiToken(getApiKey)
+          contribucion.update(contribucion_params)
+        else
+          render json: {error: 'invalid apiKey or undefined'}, status: :unauthorized
+        end
+      end
+    end
+  end
+
 
   def destroy
     if @usersController.isValidApiToken(getApiKey)

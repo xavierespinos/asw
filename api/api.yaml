@@ -1,775 +1,806 @@
-  openapi: 3.0.1
+openapi: 3.0.1
 
-  info:
-    version: '1.0.0'
-    title: HackerNews
-    description: "Open API of HackerNews ASW Project by Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
-  servers:
-    - url: 'https://gentle-retreat-46236.herokuapp.com/api'
+info:
+  version: '1.0.0'
+  title: HackerNews
+  description: "Open API of HackerNews ASW Project by Adrian Alvarez, Marcel Costa, Luis Belloso, Sergio Pascual, Xavier Espinos"
+servers:
+  - url: 'https://gentle-retreat-46236.herokuapp.com/api'
 
-  paths:
+paths:
 
-    /users:
-      put:
-        summary: Update an user
-        description: Return information of the user updated
-        tags:
-          - Users
-        requestBody:
-          description: Name and Description to update
+  /users:
+    put:
+      summary: Update an user
+      description: Return information of the user updated
+      tags:
+        - Users
+      requestBody:
+        description: Name and Description to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdated'
+      parameters:
+        - name: apiKey
+          in: header
+          description: api-key from user
           required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserUpdated'
-        parameters:
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
-          401:
-            description: unauthorized operation
-
-    /users/{id}:
-      get:
-        summary: Show an User
-        description: Return information of the user with id = "id"
-        tags:
-          - Users
-        parameters:
-          - name: id
-            in: path
-            description: id from user
-            required: true
-            schema:
-              type: integer
-              format: int32
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
-          404:
-            description: user not found
-
-    /users/login:
-      post:
-        summary: Login user
-        description: Return apiKey
-        tags:
-          - Users
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserLogin'
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/UserLoginResponse'
-          404:
-            description: user not found
-
-
-    /contribucions:
-      get:
-        summary: All Contribution
-        description: Returns all the contributions in the system
-        tags:
-          - Contributions
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Contribution'
-
-      post:
-        summary: Add a new Contribution
-        tags:
-          - Contributions
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContributionNew'
-        parameters:
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-
-        responses:
-          201:
-            description: contribution created
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Contribution'
-          401:
-            description: Invalid ApiKey
-
-    /contribucions/asks:
-      get:
-        summary: All Ask Contributions
-        description: Returns all contributions that are tipe ask
-        tags:
-          - Contributions
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Contribution'
-          404:
-            description: Contributions not found
-
-    /contribucions/urls:
-      get:
-        summary: All urls Contributions
-        description: Returns all contributions that are tipe url
-        tags:
-          - Contributions
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Contribution'
-          404:
-            description: Contributions not found
-
-    /contribucions/{id}:
-      get:
-        summary: Show a Contribution
-        description: Returns a contribution with id = "id"
-        tags:
-          - Contributions
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Contribution'
-          404:
-            description: Contribution not found
-
-      delete:
-        summary: Deletes a Contribution
-        description: Deletes a contribution with id = "id"
-        tags:
-          - Contributions
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-          401:
-            description: unauthorized operation
-
-
-      post:
-        summary: Create a new comment
-        description: Create new comment
-        tags:
-          - Contributions
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CommentNew'
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          201:
-            description: comment created
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Comment'
-          401:
-            description: Invalid ApiKey
-
-    /comentaris/{id}:
-
-      get:
-        summary: Show a comment
-        description: Shows a comment with id = "id"
-        tags:
-          - Comments
-        parameters:
-          - name: id
-            in: path
-            description: id from comment
-            required: true
-            schema:
-              title: integer
-              format: int32
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Comment'
-          404:
-            description: Comment not found
-
-      post:
-        summary: Create a reply comment
-        description: Shows a comment
-        tags:
-          - Comments
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CommentNew'
-        parameters:
-          - name: id
-            in: path
-            description: id from comment
-            required: true
-            schema:
-              title: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          201:
-            description: reply comment created
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Comment'
-          401:
-            description: Invalid ApiKey
-
-    /comentaris/{id}/replies:
-      get:
-        summary: All replies from a coment
-        description: Returns all replies from coment with id = "id"
-        tags:
-          - Comments
-        parameters:
-          - name: id
-            in: path
-            description: id from comment
-            required: true
-            schema:
-              type: integer
-              format: int32
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Comment'
-          404:
-            description: Comment not found
-
-    /contribucions/{id}/comentaris:
-      get:
-        summary: All Comments from contribution
-        description: Returns all coments from contribution with id = "id"
-        tags:
-          - Comments
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Comment'
-          404:
-            description: Contribution not found
-
-    /contribucions/{id}/vote:
-      put:
-        summary: Vote a contribution
-        description: Increments a vote from contribution with id = "id"
-        tags:
-          - Contributions
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Contribution'
-          401:
-            description: unauthorized operation
-          400:
-            description: Contribution already voted
-          404:
-            description: Contribution not found
-
-    /contribucions/{id}/downvote:
-      put:
-        summary: Downvote a contribution
-        description: Decrements a vote from contribution with id = "id"
-        tags:
-          - Contributions
-        parameters:
-          - name: id
-            in: path
-            description: id from contribution
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Contribution'
-          401:
-            description: unauthorized operation
-          404:
-            description: Contribution not voted
-          400:
-            description: Contribution id required
-
-    /comentaris/{id}/vote:
-      put:
-        summary: Vote a comment
-        description: Increments a vote from comment with id = "id"
-        tags:
-          - Comments
-        parameters:
-          - name: id
-            in: path
-            description: id from comment
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Comment'
-          401:
-            description: unauthorized operation
-
-    /comentaris/{id}/downvote:
-      put:
-        summary: Downvote a comment
-        description: Decrements a vote from comment with id = "id"
-        tags:
-          - Comments
-        parameters:
-          - name: id
-            in: path
-            description: id from comment
-            required: true
-            schema:
-              type: integer
-              format: int32
-          - name: apiKey
-            in: header
-            description: api-key from user
-            required: true
-            schema:
-              type: string
-              format: string
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Comment'
-          401:
-            description: unauthorized operation
-
-
-    /comentaris/user/{id}:
-      get:
-        summary: Get all comments from user
-        description: Get all comments from user with id = "id"
-        tags:
-          - Users
-        parameters:
-          - name: id
-            in: path
-            description: id from user
-            schema:
-              type: integer
-              format: int32
-            required: true
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Comment'
-          404:
-            description: user not found
-
-    /contribucions/user/{id}:
-      get:
-        summary: Get all contributions from user
-        description: Get all contributions from user with id = "id"
-        tags:
-          - Users
-        parameters:
-          - name: id
-            in: path
-            description: id from user
-            schema:
-              type: integer
-              format: int32
-            required: true
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Contribution'
-          404:
-            description: user not found
-
-    /comentaris/upvoted/user/{id}:
-      get:
-        summary: Get all upvoted comments from user
-        description: Get all upvoted comments from user with id = "id"
-        tags:
-          - Users
-        parameters:
-          - name: id
-            in: path
-            description: id from user
-            schema:
-              type: integer
-              format: int32
-            required: true
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Comment'
-          404:
-            description: user not found
-
-    /contribucions/upvoted/user/{id}:
-      get:
-        summary: Get all upvoted contributions from user
-        description: Get all upvoted contributions from user with id = "id"
-        tags:
-          - Users
-        parameters:
-          - name: id
-            in: path
-            description: id from user
-            schema:
-              type: integer
-              format: int32
-            required: true
-        responses:
-          200:
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Contribution'
-          404:
-            description: user not found
-
-  components:
-    schemas:
-      UserWithoutDetails:
-        type: object
-        properties:
-          id:
-            type: number
-            format: int32
-            description: Unique identifier for the user
-          email:
-            type: string
-            description: email of the user
-          apiKey:
-            type: string
-            description: secret apiKey of the user
-
-      Comment:
-        type: object
-        properties:
-          id:
-            type: number
-            format: int
-            description: id of the comment
-          text:
+          schema:
             type: string
             format: string
-            description: content of the comment
-          contribution_id:
-            type: number
-            format: int32
-            description: Identifier from contribution
-          comentari_id:
-            type: number
-            format: int32
-            description: Unique identifier for the comment
-          user_id:
-            type: number
-            format: int32
-            description: Identifier from contribution
-          created_at:
-            type: string
-            description: Datetime when the comment was created
-          updated_at:
-            type: string
-            description: Datetime when the comment was created
-          points:
-            type: number
-            description: Number of points the comment has
-          email:
-            type: string
-            description: Email user comment
-          user_id_voted:
-            type: string
-            description:  Returns the id of the user requesting the comment if they have voted for it
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: unauthorized operation
 
-      User:
-        type: object
-        properties:
-          id:
-            type: number
+  /users/{id}:
+    get:
+      summary: Show an User
+      description: Return information of the user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          required: true
+          schema:
+            type: integer
             format: int32
-            description: Unique identifier for the user
-          username:
-            type: string
-            description: Username of the user
-          email:
-            type: string
-            description: email of the user
-          about:
-            type: string
-            description: about
-          timestamp:
-            type: string
-            description: Datetime when the user was created
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: user not found
 
-      UserLogin:
-        type: object
-        properties:
-          email:
-            type: string
-            description: Name user
-          pass:
-            type: string
-            description: Password login user
+  /users/login:
+    post:
+      summary: Login user
+      description: Return apiKey
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        404:
+          description: user not found
 
-      UserLoginResponse:
-        type: object
-        properties:
-          apiKey:
+
+  /contribucions:
+    get:
+      summary: All Contribution
+      description: Returns all the contributions in the system
+      tags:
+        - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+
+    post:
+      summary: Add a new Contribution
+      tags:
+        - Contributions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributionNew'
+      parameters:
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
             type: string
-            description: Unique identifier for the user (apiKey)
-          id:
-            type: number
+            format: string
+
+      responses:
+        201:
+          description: contribution created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        401:
+          description: Invalid ApiKey
+
+  /contribucions/asks:
+    get:
+      summary: All Ask Contributions
+      description: Returns all contributions that are tipe ask
+      tags:
+        - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contributions not found
+
+  /contribucions/urls:
+    get:
+      summary: All urls Contributions
+      description: Returns all contributions that are tipe url
+      tags:
+        - Contributions
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contributions not found
+
+  /contribucions/{id}:
+    get:
+      summary: Show a Contribution
+      description: Returns a contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
             format: int32
-            description: Unique identifier for the user
-          email:
-            type: string
-            description: Email user
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contribution not found
 
-      Contribution:
-        type: object
-        properties:
-          id:
-            type: number
+    delete:
+      summary: Deletes a Contribution
+      description: Deletes a contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
             format: int32
-            description: Unique identifier for the submission
-          user_id:
-            type: number
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+        401:
+          description: unauthorized operation
+
+
+    post:
+      summary: Create a new comment
+      description: Create new comment
+      tags:
+        - Contributions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentNew'
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
             format: int32
-            description: Identifier from contribution
-          title:
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
             type: string
-            description: Name of the submission
-          url:
-            type: string
-            description: adress to the new
-          text:
-            type: string
-            description: Message
-          created_at:
-            type: string
-            description: Datetime when the submission was created
-          updated_at:
-            type: string
-            description: Datetime when the submission was created
-          points:
-            type: number
+            format: string
+      responses:
+        201:
+          description: comment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: Invalid ApiKey
+
+
+  /contribucions/{id}/edit:
+    put:
+      summary: Show a Contribution
+      description: Returns a contribution with id = "id"
+      tags:
+        - Contributions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributionNew'
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
             format: int32
-            description: Number of points
-          tipo:
-            type: string
-            description: Type contribution
-          email:
-            type: string
-            description: Email user create contribution
-          user_id_voted:
-            type: string
-            description: Returns the id of the user requesting the contribution if they have voted for it
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        404:
+          description: Contribution not found
 
-      ContributionNew:
-        type: object
-        properties:
-          title:
-            type: string
-            description: Title of the Contribution
-          url:
-            type: string
-            description: URL
-          text:
-            type: string
-            description: Message
+  /comentaris/{id}:
 
-      CommentNew:
-        type: object
-        properties:
-          text:
-            type: string
-            description: text comment
+    get:
+      summary: Show a comment
+      description: Shows a comment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            title: integer
+            format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        404:
+          description: Comment not found
 
-      UserUpdated:
-        type: object
-        properties:
-          name:
+    post:
+      summary: Create a reply comment
+      description: Shows a comment
+      tags:
+        - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentNew'
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            title: integer
+            format: int32
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
             type: string
-            description: email of the user
-          description:
+            format: string
+      responses:
+        201:
+          description: reply comment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: Invalid ApiKey
+
+  /comentaris/{id}/replies:
+    get:
+      summary: All replies from a coment
+      description: Returns all replies from coment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: Comment not found
+
+  /contribucions/{id}/comentaris:
+    get:
+      summary: All Comments from contribution
+      description: Returns all coments from contribution with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: Contribution not found
+
+  /contribucions/{id}/vote:
+    put:
+      summary: Vote a contribution
+      description: Increments a vote from contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
             type: string
-            description:  of the user
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        401:
+          description: unauthorized operation
+        400:
+          description: Contribution already voted
+        404:
+          description: Contribution not found
+
+  /contribucions/{id}/downvote:
+    put:
+      summary: Downvote a contribution
+      description: Decrements a vote from contribution with id = "id"
+      tags:
+        - Contributions
+      parameters:
+        - name: id
+          in: path
+          description: id from contribution
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        401:
+          description: unauthorized operation
+        404:
+          description: Contribution not voted
+        400:
+          description: Contribution id required
+
+  /comentaris/{id}/vote:
+    put:
+      summary: Vote a comment
+      description: Increments a vote from comment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: unauthorized operation
+
+  /comentaris/{id}/downvote:
+    put:
+      summary: Downvote a comment
+      description: Decrements a vote from comment with id = "id"
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          description: id from comment
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: apiKey
+          in: header
+          description: api-key from user
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        401:
+          description: unauthorized operation
+
+
+  /comentaris/user/{id}:
+    get:
+      summary: Get all comments from user
+      description: Get all comments from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: user not found
+
+  /contribucions/user/{id}:
+    get:
+      summary: Get all contributions from user
+      description: Get all contributions from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: user not found
+
+  /comentaris/upvoted/user/{id}:
+    get:
+      summary: Get all upvoted comments from user
+      description: Get all upvoted comments from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        404:
+          description: user not found
+
+  /contribucions/upvoted/user/{id}:
+    get:
+      summary: Get all upvoted contributions from user
+      description: Get all upvoted contributions from user with id = "id"
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: id from user
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contribution'
+        404:
+          description: user not found
+
+components:
+  schemas:
+    UserWithoutDetails:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the user
+        email:
+          type: string
+          description: email of the user
+        apiKey:
+          type: string
+          description: secret apiKey of the user
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int
+          description: id of the comment
+        text:
+          type: string
+          format: string
+          description: content of the comment
+        contribution_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
+        comentari_id:
+          type: number
+          format: int32
+          description: Unique identifier for the comment
+        user_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
+        created_at:
+          type: string
+          description: Datetime when the comment was created
+        updated_at:
+          type: string
+          description: Datetime when the comment was created
+        points:
+          type: number
+          description: Number of points the comment has
+        email:
+          type: string
+          description: Email user comment
+        user_id_voted:
+          type: string
+          description:  Returns the id of the user requesting the comment if they have voted for it
+
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the user
+        username:
+          type: string
+          description: Username of the user
+        email:
+          type: string
+          description: email of the user
+        about:
+          type: string
+          description: about
+        timestamp:
+          type: string
+          description: Datetime when the user was created
+
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Name user
+        pass:
+          type: string
+          description: Password login user
+
+    UserLoginResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: Unique identifier for the user (apiKey)
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the user
+        email:
+          type: string
+          description: Email user
+
+    Contribution:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int32
+          description: Unique identifier for the submission
+        user_id:
+          type: number
+          format: int32
+          description: Identifier from contribution
+        title:
+          type: string
+          description: Name of the submission
+        url:
+          type: string
+          description: adress to the new
+        text:
+          type: string
+          description: Message
+        created_at:
+          type: string
+          description: Datetime when the submission was created
+        updated_at:
+          type: string
+          description: Datetime when the submission was created
+        points:
+          type: number
+          format: int32
+          description: Number of points
+        tipo:
+          type: string
+          description: Type contribution
+        email:
+          type: string
+          description: Email user create contribution
+        user_id_voted:
+          type: string
+          description: Returns the id of the user requesting the contribution if they have voted for it
+
+    ContributionNew:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the Contribution
+        url:
+          type: string
+          description: URL
+        text:
+          type: string
+          description: Message
+
+    CommentNew:
+      type: object
+      properties:
+        text:
+          type: string
+          description: text comment
+
+    UserUpdated:
+      type: object
+      properties:
+        name:
+          type: string
+          description: email of the user
+        description:
+          type: string
+          description:  of the user

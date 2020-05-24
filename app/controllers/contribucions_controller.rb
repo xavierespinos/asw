@@ -227,7 +227,7 @@ class ContribucionsController < ApplicationController
     end
   end
 
-  def getContribucioByUrl(contUrl)
+  def getContribucioByUrl(contUrl,idUser)
     return Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(url: contUrl)
   end
 

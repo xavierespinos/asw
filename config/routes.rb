@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get '/api/contribucions/asks' =>'api/contribucions#asks' # get de tots els asks FET
     get '/api/contribucions/urls' =>'api/contribucions#urls'# get de tots els news FET
     delete '/api/contribucions/:id' =>'api/contribucions#destroy' # delete contribucion FET
+    put '/api/contribucions/:id/edit' =>'api/contribucions#update' # put d'un downvote FET
 
     get '/api/contribucions/:id' =>'api/contribucions#show' # get d'una contribucio FET
     get '/api/contribucions/:id/comentaris' =>'api/contribucions#comentaris' # get dels comentaris d'una contribucio FET
