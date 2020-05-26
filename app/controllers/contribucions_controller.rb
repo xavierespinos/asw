@@ -208,7 +208,7 @@ class ContribucionsController < ApplicationController
     @contribucions = []
     @contribucionsvoted = ContribucionsVoted.where("user = ?", idUser)
     @contribucionsvoted.each do |c|
-      @contribucions << Contribucion.find(c.contribucion)
+      @contribucions << Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').find(c.contribucion)
     end
     return @contribucions
   end

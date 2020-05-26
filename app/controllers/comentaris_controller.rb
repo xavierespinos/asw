@@ -120,7 +120,7 @@ class ComentarisController < ApplicationController
 
   def getThreadsApi(idUser)
     comentaris = []
-    comentaris += Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').where(user_id: idUser,comentari_id: 0)
+    comentaris += Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').where(user_id: idUser,comentari_id: 0)
     return comentaris
   end
 
@@ -135,9 +135,9 @@ class ComentarisController < ApplicationController
 
   def getComentarisLikedApi(idUser)
     @comentaris = []
-    @comentarisvoted = Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').where("user = ?", idUser)
+    @comentarisvoted = ComentarisVoted.where("uid = ?", idUser)
     @comentarisvoted.each do |c|
-      @comentaris << Comentari.joins(:user,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','users.email','comentaris_voteds.uid as user_id_voted').find(c.comentari)
+      @comentaris << Comentari.joins(:user,:contribucion,"LEFT JOIN comentaris_voteds ON comentaris_voteds.comentari = comentaris.id and comentaris_voteds.uid = " + String(idUser)).select('comentaris.*','contribucions.title as contribucion_title','users.email','comentaris_voteds.uid as user_id_voted').find(c.comentari)
     end
     return @comentaris
   end
