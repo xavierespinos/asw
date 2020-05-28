@@ -77,7 +77,7 @@ class Api::ContribucionsController < Api::BaseController
            render json: {error: 'Contribucio not created'}, status: :bad_request
          end
        else
-         contribucio = @contribucionsController.getContribucioByUrl(contribucion_params[:url],idUser)[0]
+         contribucio = @contribucionsController.getContribucioByUrl(contribucion_params[:url],idUser)
          render json: contribucio, status: :ok
        end
      else

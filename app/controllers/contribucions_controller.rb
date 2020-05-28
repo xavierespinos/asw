@@ -228,7 +228,12 @@ class ContribucionsController < ApplicationController
   end
 
   def getContribucioByUrl(contUrl,idUser)
-    return Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(url: contUrl)
+    c =Contribucion.joins(:user,"LEFT JOIN contribucions_voteds ON contribucions_voteds.contribucion = contribucions.id and contribucions_voteds.user = " + String(idUser)).select('contribucions.*','users.email','contribucions_voteds.user as user_id_voted').where(url: contUrl)
+    if c.length > 0
+      return c[0]
+    else
+      return nil
+    end
   end
 
   def getContribucioByIdUser(idUser)
