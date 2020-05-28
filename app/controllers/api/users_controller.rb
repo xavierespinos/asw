@@ -36,6 +36,7 @@ class Api::UsersController < Api::BaseController
     else
       render json: {error: 'wrong apiKey'}, status: :unauthorized
     end
+
   end
 
 
